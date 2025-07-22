@@ -1,0 +1,92 @@
+[gd_scene load_steps=2 format=3 uid="uid://c14xj5cuf1xce"]
+
+[ext_resource type="Script" uid="uid://dbfp7tw6eyadc" path="res://Scripts/game_gui.gd" id="1_lw6sg"]
+
+[node name="GUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_lw6sg")
+
+[node name="DiceContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+offset_left = 560.0
+offset_top = 261.0
+offset_right = 636.0
+offset_bottom = 327.0
+
+[node name="DiceButton" type="Button" parent="DiceContainer"]
+layout_mode = 2
+text = "Kostki
+"
+
+[node name="ResourceContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_top = 307.0
+offset_right = 239.0
+offset_bottom = 357.0
+
+[node name="WoodContainer" type="VBoxContainer" parent="ResourceContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ResourceContainer/WoodContainer"]
+layout_mode = 2
+text = "Wood"
+
+[node name="Count" type="Label" parent="ResourceContainer/WoodContainer"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+
+[node name="BrickContainer" type="VBoxContainer" parent="ResourceContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ResourceContainer/BrickContainer"]
+layout_mode = 2
+text = "Brick"
+
+[node name="Count" type="Label" parent="ResourceContainer/BrickContainer"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+
+[node name="SheepContainer3" type="VBoxContainer" parent="ResourceContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ResourceContainer/SheepContainer3"]
+layout_mode = 2
+text = "Sheep"
+
+[node name="Count" type="Label" parent="ResourceContainer/SheepContainer3"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+
+[node name="GrainContainer4" type="VBoxContainer" parent="ResourceContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ResourceContainer/GrainContainer4"]
+layout_mode = 2
+text = "Grain"
+
+[node name="Count" type="Label" parent="ResourceContainer/GrainContainer4"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+
+[node name="StoneContainer5" type="VBoxContainer" parent="ResourceContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ResourceContainer/StoneContainer5"]
+layout_mode = 2
+text = "Stone"
+
+[node name="Count" type="Label" parent="ResourceContainer/StoneContainer5"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+
+[connection signal="pressed" from="DiceContainer/DiceButton" to="." method="_on_button_pressed"]
