@@ -1,6 +1,6 @@
 extends Node2D
 
-var neighbors: Array:
+@export var neighbors: Array:
 	set(value): #setter dla active
 		neighbors = value
 		

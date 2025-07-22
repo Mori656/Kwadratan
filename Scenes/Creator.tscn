@@ -9,15 +9,12 @@ script = ExtResource("1_xpp5i")
 map_tile = ExtResource("2_xeo3l")
 map_point = ExtResource("3_1qws4")
 
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(1330, 769)
-zoom = Vector2(0.4, 0.4)
-
 [node name="Button" type="Button" parent="."]
-offset_left = 1214.0
-offset_top = 1473.0
-offset_right = 1566.0
-offset_bottom = 1558.0
+z_index = 3
+offset_left = 120.0
+offset_top = 117.0
+offset_right = 472.0
+offset_bottom = 202.0
 text = "Save map"
 
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
