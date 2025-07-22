@@ -11,8 +11,9 @@ config_version=5
 [application]
 
 config/name="Kwadratan"
+run/main_scene="uid://de58hmgv3j516"
 config/features=PackedStringArray("4.4", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="res://Assets/icon.svg"
 
 [rendering]
 
