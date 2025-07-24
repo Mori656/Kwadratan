@@ -8,7 +8,7 @@ var active: bool:
 var row: int = 0
 var column: int = 0
 var value: int = 0
-
+var player_owner: int = -1 #brak właściciela
 @onready var sprite = $Sprite2D #dziecko sprite tego node
 
 func _ready(): #update tylko raz reszta eventów zależna od scen
