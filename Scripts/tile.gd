@@ -10,6 +10,7 @@ var column: int = 0
 var value: int = 0
 var resource: int = -1
 @onready var sprite = $AnimatedSprite2D #dziecko sprite tego node
+@onready var label_value = $Label #dziecko sprite tego node
 
 func _ready(): #update tylko raz reszta eventów zależna od scen
 	update_visual_state()
@@ -28,3 +29,17 @@ func toggle_active():
 
 func set_active(active_value):
 		active = active_value;
+		
+func set_value(num):
+	value = num
+	label_value.text = str(num)
+	
+func get_value():
+	return value
+	
+func set_resource(res):
+	resource = res
+	label_value.text += ("-" + str(res))
+
+func get_resource():
+	return resource

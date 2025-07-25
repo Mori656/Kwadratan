@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cayg0x1jfojf6"]
+[gd_scene load_steps=8 format=3 uid="uid://cayg0x1jfojf6"]
 
 [ext_resource type="Script" uid="uid://csj4kcyetgp40" path="res://Scripts/tile.gd" id="1_n3f48"]
 [ext_resource type="Texture2D" uid="uid://xaxqca1pceoy" path="res://Assets/tilest-x16tile.png" id="2_61x6h"]
@@ -28,6 +28,10 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vx4y2"]
 size = Vector2(16, 16)
 
+[sub_resource type="LabelSettings" id="LabelSettings_61x6h"]
+font_size = 6
+font_color = Color(0, 0, 0, 1)
+
 [node name="Node2D" type="Area2D"]
 script = ExtResource("1_n3f48")
 
@@ -36,3 +40,12 @@ sprite_frames = SubResource("SpriteFrames_nij7r")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_vx4y2")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -12.0
+offset_top = -12.0
+offset_right = 12.0
+offset_bottom = 11.0
+label_settings = SubResource("LabelSettings_61x6h")
+horizontal_alignment = 1
+vertical_alignment = 1
