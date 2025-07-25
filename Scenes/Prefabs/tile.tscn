@@ -1,18 +1,38 @@
-[gd_scene load_steps=4 format=3 uid="uid://cayg0x1jfojf6"]
+[gd_scene load_steps=7 format=3 uid="uid://cayg0x1jfojf6"]
 
 [ext_resource type="Script" uid="uid://csj4kcyetgp40" path="res://Scripts/tile.gd" id="1_n3f48"]
-[ext_resource type="Texture2D" uid="uid://dvchr7gpc7u2l" path="res://Assets/icon.svg" id="2_vx4y2"]
+[ext_resource type="Texture2D" uid="uid://xaxqca1pceoy" path="res://Assets/tilest-x16tile.png" id="2_61x6h"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xtn5h"]
+atlas = ExtResource("2_61x6h")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e672h"]
+atlas = ExtResource("2_61x6h")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nij7r"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xtn5h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e672h")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vx4y2"]
-size = Vector2(116, 114)
+size = Vector2(16, 16)
 
 [node name="Node2D" type="Area2D"]
 script = ExtResource("1_n3f48")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(65, 65)
-texture = ExtResource("2_vx4y2")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_nij7r")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(65, 65)
 shape = SubResource("RectangleShape2D_vx4y2")

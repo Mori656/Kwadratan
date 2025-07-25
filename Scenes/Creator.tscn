@@ -4,12 +4,44 @@
 [ext_resource type="PackedScene" uid="uid://cayg0x1jfojf6" path="res://Scenes/Prefabs/tile.tscn" id="2_xeo3l"]
 [ext_resource type="PackedScene" uid="uid://1cy5m1ykp5dn" path="res://Scenes/Prefabs/point.tscn" id="3_1qws4"]
 
-[node name="Main" type="Node2D"]
+[node name="Main" type="Node2D" groups=["points"]]
 script = ExtResource("1_xpp5i")
 map_tile = ExtResource("2_xeo3l")
 map_point = ExtResource("3_1qws4")
 
-[node name="Button" type="Button" parent="."]
+[node name="tiles" type="Node2D" parent="."]
+
+[node name="points" type="Node2D" parent="."]
+
+[node name="GUI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="GUI"]
+layout_mode = 2
+offset_left = 123.0
+offset_top = 218.0
+offset_right = 210.0
+offset_bottom = 241.0
+text = "Map name:"
+
+[node name="map_name_input" type="LineEdit" parent="GUI"]
+layout_mode = 2
+offset_left = 223.0
+offset_top = 215.0
+offset_right = 291.563
+offset_bottom = 246.0
+
+[node name="info_label" type="Label" parent="GUI"]
+layout_mode = 2
+offset_left = 122.0
+offset_top = 256.0
+offset_right = 161.0
+offset_bottom = 279.0
+
+[node name="Button" type="Button" parent="GUI"]
 z_index = 3
 offset_left = 120.0
 offset_top = 117.0
@@ -17,4 +49,4 @@ offset_right = 472.0
 offset_bottom = 202.0
 text = "Save map"
 
-[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="GUI/Button" to="." method="_on_button_pressed"]
