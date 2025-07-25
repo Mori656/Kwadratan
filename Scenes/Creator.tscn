@@ -43,6 +43,7 @@ offset_bottom = 279.0
 
 [node name="Button" type="Button" parent="GUI"]
 z_index = 3
+layout_mode = 0
 offset_left = 120.0
 offset_top = 117.0
 offset_right = 472.0
