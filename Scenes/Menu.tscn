@@ -36,6 +36,16 @@ layout_mode = 2
 text = "Exit
 "
 
+[node name="Host" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Host"
+
+[node name="Client" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Client"
+
 [connection signal="button_up" from="VBoxContainer/Start" to="." method="_on_start_button_up"]
 [connection signal="button_up" from="VBoxContainer/Create" to="." method="_on_create_button_up"]
 [connection signal="button_up" from="VBoxContainer/Exit" to="." method="_on_exit_button_up"]
+[connection signal="button_up" from="VBoxContainer/Host" to="." method="_on_host_button_up"]
+[connection signal="button_up" from="VBoxContainer/Client" to="." method="_on_client_button_up"]
