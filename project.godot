@@ -15,6 +15,10 @@ run/main_scene="uid://ccd3tr8atngf4"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://Assets/icon.svg"
 
+[autoload]
+
+CoopHandler="*res://Scripts/coop_handler.gd"
+
 [display]
 
 window/size/viewport_width=640

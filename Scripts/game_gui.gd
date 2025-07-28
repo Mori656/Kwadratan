@@ -18,12 +18,14 @@ func _process(delta):
 	update_gui()
 
 func update_gui():
-	pass
 	wood_label.text = str(inventory.resources["wood"])
 	brick_label.text = str(inventory.resources["brick"])
 	sheep_label.text = str(inventory.resources["sheep"])
 	grain_label.text = str(inventory.resources["grain"])
 	stone_label.text = str(inventory.resources["stone"])
+	
+func update_cient_gui():
+	update_gui()
 
 func _on_button_pressed() -> void:
 	k1 = randi() % 6 + 1
@@ -35,5 +37,6 @@ func _on_button_pressed() -> void:
 		pass
 	print("Kostka 1:", k1)
 	print("Kostka 2:", k2)
-	
+	update_gui()
+	rpc("update_cient_gui")
 	pass # Replace with function body.

@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://ccd3tr8atngf4"]
+[gd_scene load_steps=2 format=3 uid="uid://ccd3tr8atngf4"]
 
 [ext_resource type="Script" uid="uid://dyomf87jcxcgp" path="res://Scripts/menu.gd" id="1_3kf3n"]
-[ext_resource type="PackedScene" uid="uid://cwc4epdf5risy" path="res://Scenes/MapSelector.tscn" id="2_6pedr"]
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -37,8 +36,16 @@ layout_mode = 2
 text = "Exit
 "
 
-[node name="MapSelector" parent="." instance=ExtResource("2_6pedr")]
+[node name="Host" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Host"
+
+[node name="Client" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Client"
 
 [connection signal="button_up" from="VBoxContainer/Start" to="." method="_on_start_button_up"]
 [connection signal="button_up" from="VBoxContainer/Create" to="." method="_on_create_button_up"]
 [connection signal="button_up" from="VBoxContainer/Exit" to="." method="_on_exit_button_up"]
+[connection signal="button_up" from="VBoxContainer/Host" to="." method="_on_host_button_up"]
+[connection signal="button_up" from="VBoxContainer/Client" to="." method="_on_client_button_up"]
