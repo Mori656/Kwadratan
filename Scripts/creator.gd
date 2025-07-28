@@ -80,17 +80,20 @@ func _on_button_pressed() -> void:
 		$GUI/info_label.text = "⚠️ Please enter map name!"
 		return
 	
-	var path = "res://Scenes/Maps/" + map_name + ".tscn"
+	var path = "res://Scenes/Maps/" + map_name
 	
-	if FileAccess.file_exists(path):
+	if FileAccess.file_exists(path + ".tscn"):
 		$GUI/info_label.text = "❌ A map with that name already exists!!"
 		return
 	save_current_map(path)
 
 #zapis sceny
 func save_current_map(path: String):
+	var image_path = path + ".png"
+	var map_path = path + ".tscn"
 	# Odłączamy node do eksportu
 	var GUI = $GUI
+	GUI.visible = false # do screena
 	remove_child(GUI)
 	# Zmiana skryptu dla wyeksportowanej mapy
 	var runtime_script = load("res://Scripts/map.gd")
@@ -98,14 +101,19 @@ func save_current_map(path: String):
 	#eksport do zmiennych
 	var new_scene = PackedScene.new()
 	var result = new_scene.pack(self)
+	
+	#generuj miniaturke mapy - stabliność 
+	call_deferred("generate_map_thumbnail", image_path)
+	
 	# Przywracamy domyślne ustawienia
 	add_child(GUI)
+	GUI.visible = true
 	set_script(preload("res://Scripts/creator.gd"))
 
 	if result == OK:
-		var error = ResourceSaver.save(new_scene, path)
+		var error = ResourceSaver.save(new_scene, map_path)
 		if error == OK:
-			print("Mapa pomyślnie zapisana w: ", path)
+			print("Mapa pomyślnie zapisana w: ", map_path)
 		else:
 			print("Błąd podczas zapisywania mapy: ", error)
 	else:
@@ -129,3 +137,11 @@ func deactivate_unused_points(tile):
 						break
 		if !still_has_active_neighbor:
 			point.active = false
+
+func generate_map_thumbnail(path: String):
+	await RenderingServer.frame_post_draw
+	
+	var viewport = get_viewport()
+	var img = viewport.get_texture().get_image()
+	print("dziala")
+	img.save_png(path)
