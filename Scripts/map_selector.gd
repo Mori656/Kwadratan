@@ -18,6 +18,7 @@ func _ready():
 			# KONTENER kafelka
 			var tile = VBoxContainer.new()
 			tile.size_flags_horizontal = Control.SIZE_FILL
+			tile.size_flags_vertical = Control.SIZE_FILL
 
 			# PRZYCISK lub placeholder pod miniaturkę
 			var button = Button.new()

@@ -20,10 +20,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -246.0
-offset_top = -146.0
-offset_right = 246.0
-offset_bottom = 146.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 496.0
+offset_bottom = 296.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_r6qvo")
@@ -44,16 +44,19 @@ size_flags_vertical = 3
 columns = 3
 
 [node name="TextureRect" type="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer"]
+self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 texture = SubResource("PlaceholderTexture2D_r6qvo")
 
 [node name="TextureRect2" type="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer"]
+self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 texture = SubResource("PlaceholderTexture2D_r6qvo")
 
 [node name="TextureRect3" type="TextureRect" parent="ScrollContainer/MarginContainer/GridContainer"]
+self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.0
