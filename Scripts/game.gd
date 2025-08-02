@@ -15,6 +15,8 @@ func _process(delta):
 	if Input.is_action_just_pressed("ui_cancel"):
 		get_tree().change_scene_to_file("res://Scenes/Menu.tscn")
 		
-@rpc("authority")
+@rpc("any_peer")
 func request_spawn(id: int):
+	if multiplayer.is_server():
+		return
 	$CoopSpawner.spawn_player(id)

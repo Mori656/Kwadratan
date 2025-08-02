@@ -32,6 +32,6 @@ func _on_map_selected(map_path: String):
 	print(selected_map_path)
 	$MapSelector.hide()
 
-@rpc("any_peer")
+@rpc("authority")
 func change_map(scene_path: String):
 	get_tree().change_scene_to_file(scene_path)

@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://773gltt1df8d"]
+[gd_scene load_steps=6 format=3 uid="uid://773gltt1df8d"]
 
 [ext_resource type="Script" uid="uid://dxot1n64bdhpv" path="res://Scripts/player.gd" id="1_kyqiw"]
 [ext_resource type="Texture2D" uid="uid://dvchr7gpc7u2l" path="res://Assets/icon.svg" id="2_gntrk"]
+[ext_resource type="Script" uid="uid://dp30iiy7ugu3l" path="res://Scripts/player_inventory.gd" id="3_gntrk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kyqiw"]
 
@@ -27,3 +28,6 @@ shape = SubResource("RectangleShape2D_kyqiw")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_dewec")
+
+[node name="Inventory" type="Node2D" parent="."]
+script = ExtResource("3_gntrk")

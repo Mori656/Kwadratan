@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://dwasi7octr36h" path="res://Scripts/game.gd" id="1_iukft"]
 [ext_resource type="PackedScene" uid="uid://c14xj5cuf1xce" path="res://Scenes/GameGUI.tscn" id="2_gl6un"]
-[ext_resource type="Script" uid="uid://dp30iiy7ugu3l" path="res://Scripts/inventory.gd" id="3_j5yw3"]
 [ext_resource type="Script" uid="uid://fretbchkvywe" path="res://Scripts/coop_spawner.gd" id="5_b2bpf"]
+[ext_resource type="Script" uid="uid://lojug5jaedq7" path="res://Scripts/bank_inventory.gd" id="6_2irst"]
 [ext_resource type="PackedScene" uid="uid://773gltt1df8d" path="res://Scenes/Player.tscn" id="6_7lihs"]
 [ext_resource type="PackedScene" path="res://Scenes/Maps/lol.tscn" id="6_fgofq"]
 
@@ -11,9 +11,6 @@
 script = ExtResource("1_iukft")
 
 [node name="GUI" parent="." instance=ExtResource("2_gl6un")]
-
-[node name="Inventory" type="Node2D" parent="."]
-script = ExtResource("3_j5yw3")
 
 [node name="CoopSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("uid://773gltt1df8d")
@@ -23,3 +20,6 @@ player_scene = ExtResource("6_7lihs")
 
 [node name="Map" parent="." instance=ExtResource("6_fgofq")]
 position = Vector2(155, 93)
+
+[node name="Bank_Inventory" type="Node2D" parent="."]
+script = ExtResource("6_2irst")
