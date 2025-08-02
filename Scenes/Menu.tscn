@@ -56,5 +56,5 @@ text = "Lobby"
 [connection signal="button_up" from="VBoxContainer/Exit" to="." method="_on_exit_button_up"]
 [connection signal="button_up" from="VBoxContainer/Host" to="." method="_on_host_button_up"]
 [connection signal="button_up" from="VBoxContainer/Client" to="." method="_on_client_button_up"]
-[connection signal="button_up" from="VBoxContainer/Lobby" to="." method="_on_client_button_up"]
 [connection signal="button_up" from="VBoxContainer/Lobby" to="." method="_on_lobby_button_up"]
+[connection signal="button_up" from="VBoxContainer/Lobby" to="." method="_on_client_button_up"]
