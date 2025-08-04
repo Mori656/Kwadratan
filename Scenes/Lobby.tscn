@@ -1,42 +1,111 @@
-[gd_scene load_steps=3 format=3 uid="uid://ncwwmgu57nq3"]
+[gd_scene load_steps=10 format=3 uid="uid://ncwwmgu57nq3"]
 
 [ext_resource type="Script" uid="uid://nu7ax35kmkvy" path="res://Scripts/lobby.gd" id="1_bpe3w"]
 [ext_resource type="PackedScene" uid="uid://cwc4epdf5risy" path="res://Scenes/MapSelector.tscn" id="2_lolwk"]
+[ext_resource type="StyleBox" uid="uid://c6wt2gx6vihtb" path="res://Assets/Styles/player_label_style.tres" id="3_wgubu"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wgubu"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nsj2m"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xy1bw"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vmftg"]
+
+[sub_resource type="Theme" id="Theme_nsj2m"]
+VScrollBar/styles/grabber = SubResource("StyleBoxEmpty_wgubu")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxEmpty_nsj2m")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxEmpty_xy1bw")
+VScrollBar/styles/scroll = SubResource("StyleBoxEmpty_vmftg")
+
+[sub_resource type="Theme" id="Theme_wgubu"]
+Label/constants/line_spacing = 5
+Label/constants/shadow_offset_y = 1
+Label/styles/normal = ExtResource("3_wgubu")
+VBoxContainer/constants/separation = 4
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_bpe3w")
 
 [node name="MapSelector" parent="." instance=ExtResource("2_lolwk")]
+visible = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Label" type="Label" parent="VBoxContainer"]
-layout_mode = 2
+[node name="Label" type="Label" parent="."]
+offset_right = 313.0
+offset_bottom = 23.0
 text = "Lobby"
 
-[node name="PlayerList" type="VBoxContainer" parent="VBoxContainer"]
+[node name="Label2" type="Label" parent="."]
+offset_left = 318.0
+offset_top = 2.0
+offset_right = 637.0
+offset_bottom = 25.0
+text = "Logs"
+horizontal_alignment = 1
+
+[node name="PlayersContainer" type="PanelContainer" parent="."]
+offset_top = 29.0
+offset_right = 315.0
+offset_bottom = 252.0
+focus_neighbor_top = NodePath("../Label")
+focus_neighbor_right = NodePath("../LogsContainer")
+theme = SubResource("Theme_nsj2m")
+
+[node name="MarginContainer" type="MarginContainer" parent="PlayersContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 15
+
+[node name="PlayerList" type="VBoxContainer" parent="PlayersContainer/MarginContainer"]
+layout_direction = 2
+layout_mode = 2
+size_flags_vertical = 0
+theme = SubResource("Theme_wgubu")
+
+[node name="OptionsContainer" type="PanelContainer" parent="."]
+offset_top = 253.0
+offset_right = 639.0
+offset_bottom = 358.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="OptionsContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="OptionsContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="SelectMapButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="SelectMapButton" type="Button" parent="OptionsContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "Select Map"
 
-[node name="SelectedMap" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="SelectedMapLabel" type="Label" parent="OptionsContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="StartButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="StartButton" type="Button" parent="OptionsContainer/VBoxContainer"]
 layout_mode = 2
 text = "Start Game"
 
-[node name="BackButton" type="Button" parent="VBoxContainer"]
+[node name="BackButton" type="Button" parent="OptionsContainer/VBoxContainer"]
 layout_mode = 2
 text = "Back"
 
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/SelectMapButton" to="." method="_on_select_map_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]
+[node name="LogsContainer" type="ScrollContainer" parent="."]
+offset_left = 316.0
+offset_top = 28.0
+offset_right = 639.0
+offset_bottom = 252.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = SubResource("Theme_nsj2m")
+
+[node name="Logs" type="VBoxContainer" parent="LogsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = SubResource("Theme_wgubu")
+theme_override_constants/separation = 4
+
+[connection signal="pressed" from="OptionsContainer/VBoxContainer/HBoxContainer/SelectMapButton" to="." method="_on_select_map_button_pressed"]
+[connection signal="pressed" from="OptionsContainer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="OptionsContainer/VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]
