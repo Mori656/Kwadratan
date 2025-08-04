@@ -11,6 +11,7 @@
 script = ExtResource("1_iukft")
 
 [node name="GUI" parent="." instance=ExtResource("2_gl6un")]
+z_index = 100
 
 [node name="CoopSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("uid://773gltt1df8d")
