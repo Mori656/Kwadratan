@@ -58,6 +58,8 @@ func _on_map_selected(path: String):
 
 func _on_start_button_pressed() -> void:
 	if CoopHandler.is_host and selected_map_path != "":
+		 # ZAPISZ LISTĘ GRACZY DO SINGLETONA
+		CoopHandler.players_in_game = players
 		# host wysyła sygnał startu gry - można tu dodać ready sprawdzanie
 		rpc("start_game", selected_map_path)
 

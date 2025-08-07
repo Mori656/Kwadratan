@@ -95,3 +95,4 @@ horizontal_alignment = 1
 replication_config = SubResource("SceneReplicationConfig_lw6sg")
 
 [connection signal="pressed" from="DiceContainer/DiceButton" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="DiceContainer/DiceButton" to="." method="_on_dice_button_pressed"]

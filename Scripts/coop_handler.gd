@@ -7,6 +7,7 @@ var peer: ENetMultiplayerPeer
 var is_host := false
 var selected_map: String = ""
 var player_name: String = "Player" + str(randi() % 1000) #później wybór nazwy
+var players_in_game: Dictionary = {}
 
 func start_server(players = 4) -> void:
 	is_host = true

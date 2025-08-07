@@ -12,7 +12,7 @@ var resource_dict = {1:"wood", 2:"brick", 3:"sheep", 4:"grain", 5:"stone"}
 @onready var stone_label = $ResourceContainer/StoneContainer5/Count
 
 func _ready():
-	map_tiles = get_node("../Map/tiles")
+	pass
 	
 func _process(delta):
 	update_gui()
@@ -36,6 +36,8 @@ func _on_button_pressed() -> void:
 	pass
 
 func give_resources() -> void:
+	map_tiles = get_parent().get_node("Map/Main/tiles")
+	#inventory.on_dice_rolled(resource_dict[1])
 	for tile in map_tiles.get_children():
 		if tile.get_value() == k1 + k2:
 			inventory.on_dice_rolled(resource_dict[tile.get_resource()])
