@@ -1,7 +1,9 @@
 extends Node2D
 
-@onready var player_list_container = $Players/VBoxContainer
-@onready var dice_button = $GUI/DiceContainer/DiceButton
+@onready var player_list_container = $CanvasLayer/GUI/Players/VBoxContainer
+@onready var dice_button = $CanvasLayer/GUI/DiceContainer/DiceButton
+@onready var gui = $CanvasLayer/GUI
+@onready var game_inventory = $GameInventory
 
 var turn_order: Array = [] #na podstawie listy graczy
 var current_turn_index := 0
@@ -12,6 +14,11 @@ func _ready():
 		#wczytujemy mapę i wysyłamy listę graczy 
 		load_map.rpc(CoopHandler.selected_map)
 		send_players_list_to_clients.rpc(CoopHandler.players_in_game)
+		
+		for player_id in CoopHandler.players_in_game:
+			print(player_id)
+			game_inventory.setup_player_inventory(player_id)
+		gui.update_gui()
 		
 		# Serwer ustala kolejność tury
 		turn_order = CoopHandler.players_in_game.keys()

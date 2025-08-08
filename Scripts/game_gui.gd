@@ -4,25 +4,32 @@ var k1 = 0
 var k2 = 0
 var map_tiles = -1
 var resource_dict = {1:"wood", 2:"brick", 3:"sheep", 4:"grain", 5:"stone"}
-@onready var inventory = $"../Bank_Inventory"
-@onready var wood_label = $ResourceContainer/WoodContainer/Count
-@onready var brick_label = $ResourceContainer/BrickContainer/Count
-@onready var sheep_label = $ResourceContainer/SheepContainer3/Count
-@onready var grain_label = $ResourceContainer/GrainContainer4/Count
-@onready var stone_label = $ResourceContainer/StoneContainer5/Count
 
-func _ready():
-	pass
+@onready var inventory = $"../../GameInventory"
+@onready var player_resources_container = $PlayerResourceContainer
 	
-func _process(delta):
-	update_gui()
-
 func update_gui():
-	wood_label.text = str(inventory.resources["wood"])
-	brick_label.text = str(inventory.resources["brick"])
-	sheep_label.text = str(inventory.resources["sheep"])
-	grain_label.text = str(inventory.resources["grain"])
-	stone_label.text = str(inventory.resources["stone"])
+	print("Uruchamiam update")
+	rpc("update_player_resources")
+	
+@rpc("any_peer", "call_local")
+func update_player_resources():
+	print("Gracz ", multiplayer.get_unique_id(), " robi update")
+	#Czyszczenie gui surowców
+	for child in player_resources_container.get_children():
+		child.queue_free()
+	
+	#Tworzenie gui surowców
+	var player_resources = inventory.get_player_resources(multiplayer.get_unique_id())
+	for i in resource_dict:
+		var box = VBoxContainer.new()
+		var title = Label.new()
+		var count = Label.new()
+		title.text = resource_dict[i]
+		count.text = str(player_resources[resource_dict[i]])
+		box.add_child(title)
+		box.add_child(count)
+		player_resources_container.add_child(box)
 
 func _on_button_pressed() -> void:
 	k1 = randi() % 6 + 1
@@ -32,7 +39,6 @@ func _on_button_pressed() -> void:
 	print("Kostka 2:", k2)
 	
 	give_resources()
-	update_gui()
 	pass
 
 func give_resources() -> void:

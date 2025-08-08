@@ -25,68 +25,71 @@ layout_mode = 2
 text = "Kostki
 "
 
-[node name="ResourceContainer" type="HBoxContainer" parent="."]
+[node name="BankResourceContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
-offset_top = 307.0
-offset_right = 239.0
-offset_bottom = 357.0
+offset_left = 541.0
+offset_top = 142.0
+offset_right = 780.0
+offset_bottom = 192.0
+scale = Vector2(0.405, 0.405)
+pivot_offset = Vector2(-0.045, 0)
 
-[node name="WoodContainer" type="VBoxContainer" parent="ResourceContainer"]
+[node name="WoodContainer" type="VBoxContainer" parent="BankResourceContainer"]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="ResourceContainer/WoodContainer"]
+[node name="Title" type="Label" parent="BankResourceContainer/WoodContainer"]
 layout_mode = 2
 text = "Wood"
 
-[node name="Count" type="Label" parent="ResourceContainer/WoodContainer"]
+[node name="Count" type="Label" parent="BankResourceContainer/WoodContainer"]
 layout_mode = 2
 text = "0"
 horizontal_alignment = 1
 
-[node name="BrickContainer" type="VBoxContainer" parent="ResourceContainer"]
+[node name="BrickContainer" type="VBoxContainer" parent="BankResourceContainer"]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="ResourceContainer/BrickContainer"]
+[node name="Title" type="Label" parent="BankResourceContainer/BrickContainer"]
 layout_mode = 2
 text = "Brick"
 
-[node name="Count" type="Label" parent="ResourceContainer/BrickContainer"]
+[node name="Count" type="Label" parent="BankResourceContainer/BrickContainer"]
 layout_mode = 2
 text = "0"
 horizontal_alignment = 1
 
-[node name="SheepContainer3" type="VBoxContainer" parent="ResourceContainer"]
+[node name="SheepContainer3" type="VBoxContainer" parent="BankResourceContainer"]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="ResourceContainer/SheepContainer3"]
+[node name="Title" type="Label" parent="BankResourceContainer/SheepContainer3"]
 layout_mode = 2
 text = "Sheep"
 
-[node name="Count" type="Label" parent="ResourceContainer/SheepContainer3"]
+[node name="Count" type="Label" parent="BankResourceContainer/SheepContainer3"]
 layout_mode = 2
 text = "0"
 horizontal_alignment = 1
 
-[node name="GrainContainer4" type="VBoxContainer" parent="ResourceContainer"]
+[node name="GrainContainer4" type="VBoxContainer" parent="BankResourceContainer"]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="ResourceContainer/GrainContainer4"]
+[node name="Title" type="Label" parent="BankResourceContainer/GrainContainer4"]
 layout_mode = 2
 text = "Grain"
 
-[node name="Count" type="Label" parent="ResourceContainer/GrainContainer4"]
+[node name="Count" type="Label" parent="BankResourceContainer/GrainContainer4"]
 layout_mode = 2
 text = "0"
 horizontal_alignment = 1
 
-[node name="StoneContainer5" type="VBoxContainer" parent="ResourceContainer"]
+[node name="StoneContainer5" type="VBoxContainer" parent="BankResourceContainer"]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="ResourceContainer/StoneContainer5"]
+[node name="Title" type="Label" parent="BankResourceContainer/StoneContainer5"]
 layout_mode = 2
 text = "Stone"
 
-[node name="Count" type="Label" parent="ResourceContainer/StoneContainer5"]
+[node name="Count" type="Label" parent="BankResourceContainer/StoneContainer5"]
 layout_mode = 2
 text = "0"
 horizontal_alignment = 1
@@ -94,5 +97,81 @@ horizontal_alignment = 1
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_lw6sg")
 
-[connection signal="pressed" from="DiceContainer/DiceButton" to="." method="_on_button_pressed"]
+[node name="Players" type="PanelContainer" parent="."]
+offset_left = 549.0
+offset_right = 675.0
+offset_bottom = 189.0
+scale = Vector2(0.7, 0.7)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Players"]
+layout_mode = 2
+
+[node name="PlayerResourceContainer" type="HBoxContainer" parent="."]
+offset_left = 7.0
+offset_top = 301.0
+offset_right = 246.0
+offset_bottom = 351.0
+pivot_offset = Vector2(-0.045, 0)
+
+[node name="WoodContainer" type="VBoxContainer" parent="PlayerResourceContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="PlayerResourceContainer/WoodContainer"]
+layout_mode = 2
+text = "Wood"
+
+[node name="Count" type="Label" parent="PlayerResourceContainer/WoodContainer"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+
+[node name="BrickContainer" type="VBoxContainer" parent="PlayerResourceContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="PlayerResourceContainer/BrickContainer"]
+layout_mode = 2
+text = "Brick"
+
+[node name="Count" type="Label" parent="PlayerResourceContainer/BrickContainer"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+
+[node name="SheepContainer3" type="VBoxContainer" parent="PlayerResourceContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="PlayerResourceContainer/SheepContainer3"]
+layout_mode = 2
+text = "Sheep"
+
+[node name="Count" type="Label" parent="PlayerResourceContainer/SheepContainer3"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+
+[node name="GrainContainer4" type="VBoxContainer" parent="PlayerResourceContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="PlayerResourceContainer/GrainContainer4"]
+layout_mode = 2
+text = "Grain"
+
+[node name="Count" type="Label" parent="PlayerResourceContainer/GrainContainer4"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+
+[node name="StoneContainer5" type="VBoxContainer" parent="PlayerResourceContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="PlayerResourceContainer/StoneContainer5"]
+layout_mode = 2
+text = "Stone"
+
+[node name="Count" type="Label" parent="PlayerResourceContainer/StoneContainer5"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+
 [connection signal="pressed" from="DiceContainer/DiceButton" to="." method="_on_dice_button_pressed"]
+[connection signal="pressed" from="DiceContainer/DiceButton" to="." method="_on_button_pressed"]

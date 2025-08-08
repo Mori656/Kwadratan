@@ -53,6 +53,11 @@ func _ready():
 				point.owner = self # do zapisu mapy
 				#point.add_to_group("points") #do iteracji
 
+func _process(delta):
+	if Input.is_action_just_pressed("ui_cancel"):
+		if multiplayer.get_multiplayer_peer():
+			multiplayer.get_multiplayer_peer().close() #rozłączenie
+		get_tree().change_scene_to_file("res://Scenes/Menu.tscn")
 
 #zmiana stanu kafelka po kliknięciu
 func _on_tile_clicked(_viewport, event, _shape_idx, tile): # _ żeby warningów nie było - to chyba weak declare
@@ -75,15 +80,15 @@ func _on_tile_mouse_entered(tile):
 
 func _on_button_pressed() -> void:
 	#obsługa nazwy i duplikatów
-	var map_name = $GUI/map_name_input.text.strip_edges()
+	var map_name = $CanvasLayer/GUI/map_name_input.text.strip_edges()
 	if map_name == "":
-		$GUI/info_label.text = "⚠️ Please enter map name!"
+		$CanvasLayer/GUI/info_label.text = "⚠️ Please enter map name!"
 		return
 	
 	var path = "res://Scenes/Maps/" + map_name
 	
 	if FileAccess.file_exists(path + ".tscn"):
-		$GUI/info_label.text = "❌ A map with that name already exists!!"
+		$CanvasLayer/GUI/info_label.text = "❌ A map with that name already exists!!"
 		return
 	save_current_map(path)
 
@@ -92,7 +97,7 @@ func save_current_map(path: String):
 	var image_path = path + ".png"
 	var map_path = path + ".tscn"
 	# Odłączamy node do eksportu
-	var GUI = $GUI
+	var GUI = $CanvasLayer/GUI
 	GUI.visible = false # do screena
 	remove_child(GUI)
 	# Zmiana skryptu dla wyeksportowanej mapy

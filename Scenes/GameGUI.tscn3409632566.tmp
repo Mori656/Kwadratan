@@ -1,0 +1,108 @@
+[gd_scene load_steps=3 format=3 uid="uid://c14xj5cuf1xce"]
+
+[ext_resource type="Script" uid="uid://dbfp7tw6eyadc" path="res://Scripts/game_gui.gd" id="1_lw6sg"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_lw6sg"]
+
+[node name="GameGUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = -9.0
+offset_right = 1.0
+offset_bottom = -9.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_lw6sg")
+
+[node name="DicesContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+offset_left = 560.0
+offset_top = 261.0
+offset_right = 636.0
+offset_bottom = 327.0
+
+[node name="DiceButton" type="Button" parent="DicesContainer"]
+layout_mode = 2
+text = "Kostki
+"
+
+[node name="ResourcesContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_top = 307.0
+offset_right = 239.0
+offset_bottom = 357.0
+
+[node name="WoodContainer" type="VBoxContainer" parent="ResourcesContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ResourcesContainer/WoodContainer"]
+layout_mode = 2
+text = "Wood"
+
+[node name="Count" type="Label" parent="ResourcesContainer/WoodContainer"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+
+[node name="BrickContainer" type="VBoxContainer" parent="ResourcesContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ResourcesContainer/BrickContainer"]
+layout_mode = 2
+text = "Brick"
+
+[node name="Count" type="Label" parent="ResourcesContainer/BrickContainer"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+
+[node name="SheepContainer3" type="VBoxContainer" parent="ResourcesContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ResourcesContainer/SheepContainer3"]
+layout_mode = 2
+text = "Sheep"
+
+[node name="Count" type="Label" parent="ResourcesContainer/SheepContainer3"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+
+[node name="GrainContainer4" type="VBoxContainer" parent="ResourcesContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ResourcesContainer/GrainContainer4"]
+layout_mode = 2
+text = "Grain"
+
+[node name="Count" type="Label" parent="ResourcesContainer/GrainContainer4"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+
+[node name="StoneContainer5" type="VBoxContainer" parent="ResourcesContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ResourcesContainer/StoneContainer5"]
+layout_mode = 2
+text = "Stone"
+
+[node name="Count" type="Label" parent="ResourcesContainer/StoneContainer5"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_lw6sg")
+
+[node name="PlayersContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 529.0
+offset_top = 9.0
+offset_right = 639.0
+offset_bottom = 185.0
+
+[connection signal="pressed" from="DicesContainer/DiceButton" to="." method="_on_button_pressed"]
