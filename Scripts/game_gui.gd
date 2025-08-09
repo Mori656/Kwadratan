@@ -42,7 +42,7 @@ func _on_button_pressed() -> void:
 	pass
 
 func give_resources() -> void:
-	map_tiles = get_parent().get_node("Map/Main/tiles")
+	map_tiles = get_parent().get_parent().get_node("Map/Main/tiles")
 	#inventory.on_dice_rolled(resource_dict[1])
 	for tile in map_tiles.get_children():
 		if tile.get_value() == k1 + k2:

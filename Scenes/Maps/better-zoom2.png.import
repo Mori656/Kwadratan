@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bmgic8pekvo3a"
-path="res://.godot/imported/zoom.png-a60750248d2a1b549c88a35fa32d7c79.ctex"
+uid="uid://dm8edv2ngn30u"
+path="res://.godot/imported/better-zoom2.png-82bdc16474f65ec0f46bd167415a7a24.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Maps/zoom.png"
-dest_files=["res://.godot/imported/zoom.png-a60750248d2a1b549c88a35fa32d7c79.ctex"]
+source_file="res://Scenes/Maps/better-zoom2.png"
+dest_files=["res://.godot/imported/better-zoom2.png-82bdc16474f65ec0f46bd167415a7a24.ctex"]
 
 [params]
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://vjiqupaisanm"]
+[gd_scene load_steps=5 format=3 uid="uid://dbmt1kxx1vcnc"]
 
 [ext_resource type="Script" uid="uid://7pu6cujhmxtm" path="res://Scripts/creator.gd" id="1_xpp5i"]
 [ext_resource type="PackedScene" uid="uid://cayg0x1jfojf6" path="res://Scenes/Prefabs/tile.tscn" id="2_xeo3l"]
@@ -15,10 +15,8 @@ map_point = ExtResource("3_1qws4")
 [node name="points" type="Node2D" parent="."]
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(160, 80)
-zoom = Vector2(2, 2)
+anchor_mode = 0
 script = ExtResource("4_1qws4")
-map_size = Vector2(320, 160)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

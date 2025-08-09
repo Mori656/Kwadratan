@@ -1,7 +1,7 @@
 extends Node2D
 
 var resources = {0:{"wood":25, "brick":25, "sheep":25, "grain":25, "stone":25}}
-@onready var gui = $"../GUI"
+@onready var gui = $"../CanvasLayer/GUI"
 
 func setup_player_inventory(id):
 	var player_resources = {"wood":0, "brick":0, "sheep":0, "grain":0, "stone":0}
