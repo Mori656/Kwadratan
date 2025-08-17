@@ -1,10 +1,10 @@
 extends Node2D
 
-var resources = {0:{"wood":25, "brick":25, "sheep":25, "grain":25, "stone":25}}
+var resources = {0:{"wood":25, "iron":25, "oil":25, "coal":25, "uran":25}}
 @onready var gui = $"../CanvasLayer/GUI"
 
 func setup_player_inventory(id):
-	var player_resources = {"wood":0, "brick":0, "sheep":0, "grain":0, "stone":0}
+	var player_resources = {"wood":0, "iron":0, "oil":0, "coal":0, "uran":0}
 	resources[id] = player_resources
 	rpc("update_resource_count",resources)
 

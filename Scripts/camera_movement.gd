@@ -29,11 +29,6 @@ func _process(delta: float) -> void:
 	position += move_vector
 	#Utrzymywanie kamery w polu gry
 	
-	print("Lewo :", (vieport_size.x / zoom.x) / 2)
-	print("vieport x :", vieport_size.x)
-	print("zoom x :", zoom.x )
-	print("map x :", map_size.x )
-	print("Prawo :", map_size.x - (vieport_size.x / zoom.x) / 2)
 	position.x = clamp(position.x, 0, map_size.x - (vieport_size.x / zoom.x))
 	position.y = clamp(position.y, 0, map_size.y - (vieport_size.y / zoom.y))
 func _unhandled_input(event):

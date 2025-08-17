@@ -1,13 +1,23 @@
 extends Control
 
+@onready var inventory = $"../../GameInventory"
+@onready var wood_count = $PlayerResourcesContainer/Panel/WoodCount
+@onready var iron_count = $PlayerResourcesContainer/Panel/IronCount
+@onready var oil_count = $PlayerResourcesContainer/Panel/OilCount
+@onready var coal_count = $PlayerResourcesContainer/Panel/CoalCount
+@onready var uran_count = $PlayerResourcesContainer/Panel/UranCount
+@onready var resources_container = $PlayerResourcesContainer
+@onready var resources_container_pos = resources_container.position
+
+@onready var dice1 = $DiceContainer/DiceButton/Dice1Sprite
+@onready var dice2 = $DiceContainer/DiceButton/Dice2Sprite
+
 var k1 = 0
 var k2 = 0
 var map_tiles = -1
-var resource_dict = {1:"wood", 2:"brick", 3:"sheep", 4:"grain", 5:"stone"}
+var resource_dict = {1:"wood", 2:"iron", 3:"oil", 4:"coal", 5:"uran"}
+@onready var resource_count = {"wood":wood_count, "iron":iron_count, "oil":oil_count, "coal":coal_count, "uran":uran_count}
 
-@onready var inventory = $"../../GameInventory"
-@onready var player_resources_container = $PlayerResourceContainer
-	
 func update_gui():
 	print("Uruchamiam update")
 	rpc("update_player_resources")
@@ -15,28 +25,18 @@ func update_gui():
 @rpc("any_peer", "call_local")
 func update_player_resources():
 	print("Gracz ", multiplayer.get_unique_id(), " robi update")
-	#Czyszczenie gui surowców
-	for child in player_resources_container.get_children():
-		child.queue_free()
 	
 	#Tworzenie gui surowców
 	var player_resources = inventory.get_player_resources(multiplayer.get_unique_id())
 	for i in resource_dict:
-		var box = VBoxContainer.new()
-		var title = Label.new()
-		var count = Label.new()
-		title.text = resource_dict[i]
-		count.text = str(player_resources[resource_dict[i]])
-		box.add_child(title)
-		box.add_child(count)
-		player_resources_container.add_child(box)
+		resource_count[resource_dict[i]].text = str(player_resources[resource_dict[i]])
 
-func _on_button_pressed() -> void:
+func _on_dice_button_pressed() -> void:
 	k1 = randi() % 6 + 1
 	k2 = randi() % 6 + 1
 	
-	print("Kostka 1:", k1)
-	print("Kostka 2:", k2)
+	dice1.frame = k1 - 1
+	dice2.frame = k2 - 1
 	
 	give_resources()
 	pass
@@ -49,3 +49,10 @@ func give_resources() -> void:
 			inventory.on_dice_rolled(resource_dict[tile.get_resource()])
 			pass
 		pass
+
+func _on_hide_button_toggled(toggled_on: bool) -> void:
+	var resources_container_tween = create_tween()
+	if toggled_on:
+		resources_container_tween.tween_property(resources_container,"position",resources_container_pos ,1)
+	else:
+		resources_container_tween.tween_property(resources_container,"position",resources_container_pos + Vector2(0,50), 1)

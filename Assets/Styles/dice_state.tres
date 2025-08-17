@@ -1,0 +1,53 @@
+[gd_resource type="SpriteFrames" load_steps=8 format=3 uid="uid://b5dsbgihc22iw"]
+
+[ext_resource type="Texture2D" uid="uid://bcpwa6ovbtef1" path="res://Assets/kwadratan-tileset.png" id="1_r201j"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qa70m"]
+atlas = ExtResource("1_r201j")
+region = Rect2(176, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ib0dp"]
+atlas = ExtResource("1_r201j")
+region = Rect2(192, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jrhol"]
+atlas = ExtResource("1_r201j")
+region = Rect2(176, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b0ccm"]
+atlas = ExtResource("1_r201j")
+region = Rect2(192, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mnuo6"]
+atlas = ExtResource("1_r201j")
+region = Rect2(176, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_weswk"]
+atlas = ExtResource("1_r201j")
+region = Rect2(192, 32, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qa70m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ib0dp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jrhol")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b0ccm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mnuo6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_weswk")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

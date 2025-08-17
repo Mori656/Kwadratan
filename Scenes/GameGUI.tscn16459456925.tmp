@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://c14xj5cuf1xce"]
+[gd_scene load_steps=5 format=3 uid="uid://c14xj5cuf1xce"]
 
 [ext_resource type="Script" uid="uid://dbfp7tw6eyadc" path="res://Scripts/game_gui.gd" id="1_lw6sg"]
-[ext_resource type="SpriteFrames" uid="uid://b5dsbgihc22iw" path="res://Assets/Styles/dice_state.tres" id="2_fn00h"]
 [ext_resource type="Theme" uid="uid://ce1k4m8vw8vhd" path="res://Assets/Styles/Gui.tres" id="2_to364"]
 [ext_resource type="Texture2D" uid="uid://bcpwa6ovbtef1" path="res://Assets/kwadratan-tileset.png" id="3_fn00h"]
 
@@ -16,25 +15,17 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_lw6sg")
 
-[node name="DiceContainer" type="PanelContainer" parent="."]
+[node name="DiceContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
-offset_left = 544.0
-offset_top = 231.0
-offset_right = 638.0
-offset_bottom = 279.0
+offset_left = 560.0
+offset_top = 261.0
+offset_right = 636.0
+offset_bottom = 327.0
 
 [node name="DiceButton" type="Button" parent="DiceContainer"]
 layout_mode = 2
-
-[node name="Dice1Sprite" type="AnimatedSprite2D" parent="DiceContainer/DiceButton"]
-position = Vector2(24, 24)
-scale = Vector2(3, 3)
-sprite_frames = ExtResource("2_fn00h")
-
-[node name="Dice2Sprite" type="AnimatedSprite2D" parent="DiceContainer/DiceButton"]
-position = Vector2(70, 24)
-scale = Vector2(3, 3)
-sprite_frames = ExtResource("2_fn00h")
+text = "Kostki
+"
 
 [node name="BankResourceContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
@@ -118,36 +109,92 @@ scale = Vector2(0.7, 0.7)
 [node name="VBoxContainer" type="VBoxContainer" parent="Players"]
 layout_mode = 2
 
-[node name="PlayerResourcesContainer" type="Control" parent="."]
-anchors_preset = 0
+[node name="PlayerResourceContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = -238.0
+offset_top = 277.0
+offset_right = 1.0
+offset_bottom = 327.0
+pivot_offset = Vector2(-0.045, 0)
+
+[node name="WoodContainer" type="VBoxContainer" parent="PlayerResourceContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="PlayerResourceContainer/WoodContainer"]
+layout_mode = 2
+text = "Wood"
+
+[node name="Count" type="Label" parent="PlayerResourceContainer/WoodContainer"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+
+[node name="BrickContainer" type="VBoxContainer" parent="PlayerResourceContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="PlayerResourceContainer/BrickContainer"]
+layout_mode = 2
+text = "Brick"
+
+[node name="Count" type="Label" parent="PlayerResourceContainer/BrickContainer"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+
+[node name="SheepContainer3" type="VBoxContainer" parent="PlayerResourceContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="PlayerResourceContainer/SheepContainer3"]
+layout_mode = 2
+text = "Sheep"
+
+[node name="Count" type="Label" parent="PlayerResourceContainer/SheepContainer3"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+
+[node name="GrainContainer4" type="VBoxContainer" parent="PlayerResourceContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="PlayerResourceContainer/GrainContainer4"]
+layout_mode = 2
+text = "Grain"
+
+[node name="Count" type="Label" parent="PlayerResourceContainer/GrainContainer4"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+
+[node name="StoneContainer5" type="VBoxContainer" parent="PlayerResourceContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="PlayerResourceContainer/StoneContainer5"]
+layout_mode = 2
+text = "Stone"
+
+[node name="Count" type="Label" parent="PlayerResourceContainer/StoneContainer5"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 0
 offset_left = 175.0
 offset_top = 322.0
 offset_right = 475.0
 offset_bottom = 372.0
 
-[node name="HideButton" type="Button" parent="PlayerResourcesContainer"]
+[node name="Panel" type="Panel" parent="PanelContainer"]
 layout_mode = 2
-offset_left = 125.0
-offset_top = -40.0
-offset_right = 175.0
-toggle_mode = true
-button_pressed = true
-text = "Hide
-"
-
-[node name="Panel" type="Panel" parent="PlayerResourcesContainer"]
-layout_mode = 2
-offset_right = 300.0
-offset_bottom = 50.0
 theme = ExtResource("2_to364")
 
-[node name="WoodImage" type="Sprite2D" parent="PlayerResourcesContainer/Panel"]
+[node name="WoodImage" type="Sprite2D" parent="PanelContainer/Panel"]
 position = Vector2(50, 20)
 texture = ExtResource("3_fn00h")
 region_enabled = true
 region_rect = Rect2(0, 161, 32, 16)
 
-[node name="WoodCount" type="Label" parent="PlayerResourcesContainer/Panel"]
+[node name="WoodCount" type="Label" parent="PanelContainer/Panel"]
 layout_mode = 2
 offset_left = 15.0
 offset_top = 10.0
@@ -155,53 +202,53 @@ offset_right = 35.0
 offset_bottom = 33.0
 text = "00"
 
-[node name="IronImage" type="Sprite2D" parent="PlayerResourcesContainer/Panel"]
+[node name="IronImage" type="Sprite2D" parent="PanelContainer/Panel"]
 position = Vector2(108, 20)
 scale = Vector2(1.1, 1.1)
 texture = ExtResource("3_fn00h")
 region_enabled = true
 region_rect = Rect2(32, 161, 32, 16)
 
-[node name="IronCount" type="Label" parent="PlayerResourcesContainer/Panel"]
+[node name="IronCount" type="Label" parent="PanelContainer/Panel"]
 offset_left = 75.0
 offset_top = 10.0
 offset_right = 94.0
 offset_bottom = 33.0
 text = "00"
 
-[node name="OilImage" type="Sprite2D" parent="PlayerResourcesContainer/Panel"]
+[node name="OilImage" type="Sprite2D" parent="PanelContainer/Panel"]
 position = Vector2(162, 21)
 texture = ExtResource("3_fn00h")
 region_enabled = true
 region_rect = Rect2(64, 161, 32, 16)
 
-[node name="OilCount" type="Label" parent="PlayerResourcesContainer/Panel"]
+[node name="OilCount" type="Label" parent="PanelContainer/Panel"]
 offset_left = 132.0
 offset_top = 10.0
 offset_right = 151.0
 offset_bottom = 33.0
 text = "00"
 
-[node name="CoalImage" type="Sprite2D" parent="PlayerResourcesContainer/Panel"]
+[node name="CoalImage" type="Sprite2D" parent="PanelContainer/Panel"]
 position = Vector2(215, 21)
 texture = ExtResource("3_fn00h")
 region_enabled = true
 region_rect = Rect2(96, 161, 32, 16)
 
-[node name="CoalCount" type="Label" parent="PlayerResourcesContainer/Panel"]
+[node name="CoalCount" type="Label" parent="PanelContainer/Panel"]
 offset_left = 180.0
 offset_top = 10.0
 offset_right = 199.0
 offset_bottom = 33.0
 text = "00"
 
-[node name="UranImage" type="Sprite2D" parent="PlayerResourcesContainer/Panel"]
+[node name="UranImage" type="Sprite2D" parent="PanelContainer/Panel"]
 position = Vector2(275, 22)
 texture = ExtResource("3_fn00h")
 region_enabled = true
 region_rect = Rect2(128, 161, 32, 16)
 
-[node name="UranCount" type="Label" parent="PlayerResourcesContainer/Panel"]
+[node name="UranCount" type="Label" parent="PanelContainer/Panel"]
 offset_left = 237.0
 offset_top = 11.0
 offset_right = 247.0
@@ -209,4 +256,4 @@ offset_bottom = 34.0
 text = "00"
 
 [connection signal="pressed" from="DiceContainer/DiceButton" to="." method="_on_dice_button_pressed"]
-[connection signal="toggled" from="PlayerResourcesContainer/HideButton" to="." method="_on_hide_button_toggled"]
+[connection signal="pressed" from="DiceContainer/DiceButton" to="." method="_on_button_pressed"]

@@ -1,6 +1,6 @@
 extends Node2D
 
-var resources = {"wood":0, "brick":0, "sheep":0, "grain":0, "stone":0}
+var resources = {"wood":0, "iron":0, "oil":0, "coal":0, "uran":0}
 
 func add_resource(res: String, count: int):
 	if not resources.has(res):
