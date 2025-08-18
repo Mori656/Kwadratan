@@ -1,15 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://bgfppx4gvex5"]
+[gd_scene load_steps=4 format=3 uid="uid://bgfppx4gvex5"]
 
 [ext_resource type="Script" uid="uid://dwasi7octr36h" path="res://Scripts/game.gd" id="1_iukft"]
 [ext_resource type="PackedScene" uid="uid://c14xj5cuf1xce" path="res://Scenes/GameGUI.tscn" id="2_gl6un"]
-[ext_resource type="PackedScene" uid="uid://1850ci48r24a" path="res://Scenes/Maps/test2.tscn" id="3_kldst"]
 [ext_resource type="Script" uid="uid://lojug5jaedq7" path="res://Scripts/game_inventory.gd" id="6_2irst"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_iukft")
-
-[node name="Map" parent="." instance=ExtResource("3_kldst")]
-position = Vector2(106, 59)
 
 [node name="GameInventory" type="Node2D" parent="."]
 script = ExtResource("6_2irst")
@@ -18,3 +14,4 @@ script = ExtResource("6_2irst")
 
 [node name="GUI" parent="CanvasLayer" instance=ExtResource("2_gl6un")]
 z_index = 100
+mouse_filter = 2

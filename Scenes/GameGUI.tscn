@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://c14xj5cuf1xce"]
 
 [ext_resource type="Script" uid="uid://dbfp7tw6eyadc" path="res://Scripts/game_gui.gd" id="1_lw6sg"]
-[ext_resource type="SpriteFrames" uid="uid://b5dsbgihc22iw" path="res://Assets/Styles/dice_state.tres" id="2_fn00h"]
-[ext_resource type="Theme" uid="uid://ce1k4m8vw8vhd" path="res://Assets/Styles/Gui.tres" id="2_to364"]
+[ext_resource type="SpriteFrames" uid="uid://c57xudkpyk0gf" path="res://Assets/Styles/dice_state.tres" id="2_fn00h"]
+[ext_resource type="Theme" uid="uid://b00ihv7vo20ls" path="res://Assets/Styles/Gui.tres" id="2_to364"]
 [ext_resource type="Texture2D" uid="uid://bcpwa6ovbtef1" path="res://Assets/kwadratan-tileset.png" id="3_fn00h"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_lw6sg"]
@@ -163,6 +163,7 @@ region_enabled = true
 region_rect = Rect2(32, 161, 32, 16)
 
 [node name="IronCount" type="Label" parent="PlayerResourcesContainer/Panel"]
+layout_mode = 0
 offset_left = 75.0
 offset_top = 10.0
 offset_right = 94.0
@@ -176,6 +177,7 @@ region_enabled = true
 region_rect = Rect2(64, 161, 32, 16)
 
 [node name="OilCount" type="Label" parent="PlayerResourcesContainer/Panel"]
+layout_mode = 0
 offset_left = 132.0
 offset_top = 10.0
 offset_right = 151.0
@@ -189,6 +191,7 @@ region_enabled = true
 region_rect = Rect2(96, 161, 32, 16)
 
 [node name="CoalCount" type="Label" parent="PlayerResourcesContainer/Panel"]
+layout_mode = 0
 offset_left = 180.0
 offset_top = 10.0
 offset_right = 199.0
@@ -202,6 +205,7 @@ region_enabled = true
 region_rect = Rect2(128, 161, 32, 16)
 
 [node name="UranCount" type="Label" parent="PlayerResourcesContainer/Panel"]
+layout_mode = 0
 offset_left = 237.0
 offset_top = 11.0
 offset_right = 247.0

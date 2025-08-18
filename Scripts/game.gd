@@ -35,14 +35,25 @@ func _process(delta):
 @rpc("any_peer", "call_local", "reliable")
 func load_map(map_path: String):
 # usuwam placeholder
-	for child in $Map.get_children():
-		child.queue_free()
-	# wybrana mapa
+
 	var map_scene = load(map_path)
 	var map_instance = map_scene.instantiate()
-
-	$Map.add_child(map_instance)
+	map_instance.name = "Map"
+	
+	$".".add_child(map_instance)
 	print("Mapa '%s' została pomyślnie załadowana." % map_path)
+	
+	# Łączenie tile i pointów
+	# Iterujemy po wszystkich kafelkach w załadowanej mapie
+	for tile in map_instance.get_node("tiles").get_children():
+		tile.connect("input_event", Callable(self, "_on_tile_clicked").bind(tile))
+
+	
+	for point in $Map.get_node("points").get_children():
+		#print(point.row)
+		#print(point.collumn)
+		point.connect("input_event", Callable(self, "_on_point_clicked").bind(point))
+		point.update_visual_start_game() #zmiana wyglądu na kolej
 
 # aktualizowana tura wszędzie
 @rpc("any_peer", "call_local", "reliable")
@@ -97,3 +108,53 @@ func show_all_players(players: Dictionary):
 		else:
 			label.text = player_name
 		player_list_container.add_child(label)
+
+#STAWIANIE BANDYTY - toDO#
+func _on_tile_clicked(_viewport, event, _shape_idx, tile):
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		print("Lewy klik:", tile.name)
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+		print("Prawy klik:", tile.name)
+
+#CAŁA FUNKCJONALNOŚĆ STAWIANIE FABRYK#
+
+func _on_point_clicked(_viewport, event, _shape_idx, point):
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		request_place_factory.rpc_id(1, point.row, point.column)
+		
+@rpc("any_peer", "call_local", "reliable")
+func request_place_factory(row: int, column: int):
+	# Upewniamy się, że tylko host wykonuje tę logikę
+	if not multiplayer.is_server():
+		return
+	var requester_id = multiplayer.get_remote_sender_id()
+	# jeśli wywołane lokalnie na serwerze, to przypisz jego własne ID
+	if requester_id == 0:
+		requester_id = multiplayer.get_unique_id()
+
+	var player_number = current_turn_index #numer gracza  - do kolorów
+	# Sprawdzamy, czy prośbę wysłał gracz, którego jest tura
+	if requester_id == turn_order[current_turn_index]:
+		### to ma się wykonać kiedy zaakceptuje host
+		for point in $Map.get_node("points").get_children():
+			if point.row == row and point.column == column:
+				print("znalazlem")
+				if not point.factory and point.player_owner == -1: # Jeśli można zbudować
+					update_map_point.rpc(row, column, player_number, false) #zbuduj
+				elif point.player_owner == player_number: #jak twoje to możesz ulepszyc:
+					update_map_point.rpc(row, column, player_number, true) # true = ulepsz
+	else:
+		print("to nie jest tura tego gracza")
+		return
+
+#WSZYSCY (wykonują polecenie od hosta - aktualizacja planszy
+@rpc("any_peer", "call_local", "reliable")
+func update_map_point(row: int, column: int, owner_player_number: int, should_upgrade: bool):
+	# Każdy gracz update na mapce
+	for point in $Map.get_node("points").get_children():
+		if point.row == row and point.column == column:
+			point.set_point_owner(owner_player_number)
+			if not should_upgrade:
+				point.place_factory()
+			else:
+				point.upgrade_factory()

@@ -4,7 +4,7 @@ extends Node2D
 @export var map_point: PackedScene 
 @export var tile_count_h: int = 10
 @export var tile_count_w: int = 20
-
+var screensize = Vector2i(640,360)
 var offsets = [ #do sprawdzania sąsiedztwa
 	Vector2i(0, 0),
 	Vector2i(-1, 0),
@@ -13,11 +13,13 @@ var offsets = [ #do sprawdzania sąsiedztwa
 ]
 
 func _ready():
+	print("EKRAN" , screensize)
 	for height in range(tile_count_h):
 		for width in range(tile_count_w):
 			var tile = map_tile.instantiate()
 			#pozycja i wartości dla kafelków
-			tile.position = Vector2(width * 16, 0 + (16 * height))
+			tile.position = Vector2(width * 16 + 8, 8 + (16 * height))
+			tile.position += Vector2(screensize.x /2 - tile_count_w/2*16 +8, screensize.y /2 - tile_count_h/2*16 +8 )
 			tile.row = width
 			tile.column = height
 			tile.value = 0  # narazie 0
@@ -34,9 +36,11 @@ func _ready():
 	for height in range(tile_count_h + 1):
 			for width in range(tile_count_w + 1):
 				var point = map_point.instantiate()
-				point.position = Vector2(width * 16 - 8, 0 + (16  * height) - 8) 
-				point.row = height
-				point.column = width
+				point.position = Vector2(width * 16 - 8 + 8, 8 + (16  * height) - 8) 
+				point.position += Vector2(screensize.x /2 - tile_count_w/2*16 +8, screensize.y /2 - tile_count_h/2*16 +8 )
+				point.row = width
+				point.column = height
+				
 				#ustalanie sąsiadów dla każdego punktu
 				var local_neighbors = []
 				for offset in offsets:
@@ -47,8 +51,8 @@ func _ready():
 						local_neighbors.append(Vector2i(nx, ny))
 		
 				point.neighbors = local_neighbors
-				print( point.neighbors)
-				print(point.row, " " , point.column )
+				#print( point.neighbors)
+				#print(point.row, " " , point.column )
 				$points.add_child(point)
 				point.owner = self # do zapisu mapy
 				#point.add_to_group("points") #do iteracji
@@ -61,7 +65,7 @@ func _process(delta):
 
 #zmiana stanu kafelka po kliknięciu
 func _on_tile_clicked(_viewport, event, _shape_idx, tile): # _ żeby warningów nie było - to chyba weak declare
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT and !tile.active:
 		tile.toggle_active()
 		activate_points_with_neighbors(tile) #aktywuj pointy sąsiadujące z tym tile
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
@@ -99,7 +103,7 @@ func save_current_map(path: String):
 	# Odłączamy node do eksportu
 	var GUI = $CanvasLayer/GUI
 	GUI.visible = false # do screena
-	remove_child(GUI)
+	#remove_child(GUI)
 	# Zmiana skryptu dla wyeksportowanej mapy
 	var runtime_script = load("res://Scripts/map.gd")
 	set_script(runtime_script)
@@ -107,11 +111,13 @@ func save_current_map(path: String):
 	var new_scene = PackedScene.new()
 	var result = new_scene.pack(self)
 	
+	
+	
 	#generuj miniaturke mapy - stabliność 
 	call_deferred("generate_map_thumbnail", image_path)
 	
 	# Przywracamy domyślne ustawienia
-	add_child(GUI)
+	#add_child(GUI)
 	GUI.visible = true
 	set_script(preload("res://Scripts/creator.gd"))
 
@@ -148,5 +154,4 @@ func generate_map_thumbnail(path: String):
 	
 	var viewport = get_viewport()
 	var img = viewport.get_texture().get_image()
-	print("dziala")
 	img.save_png(path)

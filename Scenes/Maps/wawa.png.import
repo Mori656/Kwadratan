@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dm8edv2ngn30u"
-path="res://.godot/imported/better-zoom2.png-82bdc16474f65ec0f46bd167415a7a24.ctex"
+uid="uid://uwp006knj8um"
+path="res://.godot/imported/wawa.png-58d109fd897eb02906fd5bcc0e3494a6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Maps/better-zoom2.png"
-dest_files=["res://.godot/imported/better-zoom2.png-82bdc16474f65ec0f46bd167415a7a24.ctex"]
+source_file="res://Scenes/Maps/wawa.png"
+dest_files=["res://.godot/imported/wawa.png-58d109fd897eb02906fd5bcc0e3494a6.ctex"]
 
 [params]
 
