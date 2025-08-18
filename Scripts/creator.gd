@@ -11,6 +11,7 @@ var offsets = [ #do sprawdzania sąsiedztwa
 	Vector2i(0, -1),
 	Vector2i(-1, -1)
 ]
+@onready var GUI = $CanvasLayer
 
 func _ready():
 	print("EKRAN" , screensize)
@@ -24,6 +25,7 @@ func _ready():
 			tile.column = height
 			tile.value = 0  # narazie 0
 			tile.active = false
+			tile.name = "Tile" + "[" + str(tile.row) + "]" + "[" + str(tile.column) + "]"
 			$tiles.add_child(tile)
 			tile.owner = self #do zapisu mapy
 			# Podpinamy sygnał i bindowanie tile jako argument (żeby później korzystać z jego funkcji) - Pierwsze kliknięcie
@@ -51,8 +53,7 @@ func _ready():
 						local_neighbors.append(Vector2i(nx, ny))
 		
 				point.neighbors = local_neighbors
-				#print( point.neighbors)
-				#print(point.row, " " , point.column )
+				point.name = "Point" + "[" + str(point.row) + "]" + "[" + str(point.column) + "]"
 				$points.add_child(point)
 				point.owner = self # do zapisu mapy
 				#point.add_to_group("points") #do iteracji
@@ -101,9 +102,7 @@ func save_current_map(path: String):
 	var image_path = path + ".png"
 	var map_path = path + ".tscn"
 	# Odłączamy node do eksportu
-	var GUI = $CanvasLayer/GUI
-	GUI.visible = false # do screena
-	#remove_child(GUI)
+	remove_child(GUI)
 	# Zmiana skryptu dla wyeksportowanej mapy
 	var runtime_script = load("res://Scripts/map.gd")
 	set_script(runtime_script)
@@ -111,14 +110,10 @@ func save_current_map(path: String):
 	var new_scene = PackedScene.new()
 	var result = new_scene.pack(self)
 	
-	
-	
 	#generuj miniaturke mapy - stabliność 
 	call_deferred("generate_map_thumbnail", image_path)
 	
 	# Przywracamy domyślne ustawienia
-	#add_child(GUI)
-	GUI.visible = true
 	set_script(preload("res://Scripts/creator.gd"))
 
 	if result == OK:
@@ -150,8 +145,7 @@ func deactivate_unused_points(tile):
 			point.active = false
 
 func generate_map_thumbnail(path: String):
-	await RenderingServer.frame_post_draw
-	
 	var viewport = get_viewport()
 	var img = viewport.get_texture().get_image()
 	img.save_png(path)
+	#GUI.visible = true

@@ -8,6 +8,7 @@ extends Node2D
 var turn_order: Array = [] #na podstawie listy graczy
 var current_turn_index := 0
 
+
 func _ready():
 	dice_button.pressed.connect(_on_dicebutton_pressed) 
 	if multiplayer.is_server():
@@ -31,37 +32,30 @@ func _process(delta):
 			multiplayer.get_multiplayer_peer().close() #rozłączenie
 		get_tree().change_scene_to_file("res://Scenes/Menu.tscn")
 		
-# mapa na hoscie i komputerach
+# WCZYTYWANIE WSPÓLNEJ MAPY
 @rpc("any_peer", "call_local", "reliable")
 func load_map(map_path: String):
-# usuwam placeholder
-
 	var map_scene = load(map_path)
 	var map_instance = map_scene.instantiate()
 	map_instance.name = "Map"
-	
 	$".".add_child(map_instance)
 	print("Mapa '%s' została pomyślnie załadowana." % map_path)
 	
-	# Łączenie tile i pointów
-	# Iterujemy po wszystkich kafelkach w załadowanej mapie
+	# Łączenie tile i pointów (obsługa kliknięć)
 	for tile in map_instance.get_node("tiles").get_children():
 		tile.connect("input_event", Callable(self, "_on_tile_clicked").bind(tile))
 
-	
 	for point in $Map.get_node("points").get_children():
-		#print(point.row)
-		#print(point.collumn)
 		point.connect("input_event", Callable(self, "_on_point_clicked").bind(point))
 		point.update_visual_start_game() #zmiana wyglądu na kolej
 
-# aktualizowana tura wszędzie
+# AKTUALIZOWANIE TURY WSZĘDZIE
 @rpc("any_peer", "call_local", "reliable")
 func update_turn(peer_id: int):
 	var my_id = multiplayer.get_unique_id()
 	var is_my_turn = my_id == peer_id
-	
 	dice_button.disabled = not is_my_turn
+	
 	if is_my_turn:
 		print("Tura gracza", peer_id)
 	else:
@@ -75,8 +69,7 @@ func _on_dicebutton_pressed():
 	print("Kliknięto przycisk – rzut kością!")
 	request_end_turn.rpc() # wywołujemy requesta końca tury
 
-# tylko serwer może zmienić turę
-# Klient może ją wywołać (żeby host mógł zmienić)
+# REQUEST KLIENTA KOŃCA TURY - OBSŁUGA PRZEZ HOSTA
 @rpc("any_peer", "call_local", "reliable")
 func request_end_turn():
 	if multiplayer.is_server():
@@ -90,7 +83,8 @@ func end_turn():
 
 	var next_peer_id = turn_order[current_turn_index]
 	update_turn.rpc(next_peer_id)
-	
+
+#WSPÓLNA LISTA GRACZY	
 @rpc("any_peer", "call_local", "reliable")
 func send_players_list_to_clients(players: Dictionary):
 	show_all_players(players)
@@ -99,7 +93,7 @@ func show_all_players(players: Dictionary):
 	if players.is_empty():
 		print("Błąd: Brak graczy do wyświetlenia!")
 		return
-
+	
 	for player_id in players:
 		var player_name = players[player_id]
 		var label = Label.new()
@@ -109,14 +103,14 @@ func show_all_players(players: Dictionary):
 			label.text = player_name
 		player_list_container.add_child(label)
 
-#STAWIANIE BANDYTY - toDO#
+#STAWIANIE BANDYTY - TODO#
 func _on_tile_clicked(_viewport, event, _shape_idx, tile):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		print("Lewy klik:", tile.name)
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 		print("Prawy klik:", tile.name)
 
-#CAŁA FUNKCJONALNOŚĆ STAWIANIE FABRYK#
+#CAŁA FUNKCJONALNOŚĆ STAWIANIE I OBSŁUGA FABRYK#
 
 func _on_point_clicked(_viewport, event, _shape_idx, point):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
@@ -138,8 +132,12 @@ func request_place_factory(row: int, column: int):
 		### to ma się wykonać kiedy zaakceptuje host
 		for point in $Map.get_node("points").get_children():
 			if point.row == row and point.column == column:
-				print("znalazlem")
 				if not point.factory and point.player_owner == -1: # Jeśli można zbudować
+					# sprawdź sąsiadów (odległość 1)
+					if has_neighbor_factory(row, column):
+						print("Nie można postawić – obok już jest fabryka!")
+						return
+				# jeśli brak sąsiadów -> buduj
 					update_map_point.rpc(row, column, player_number, false) #zbuduj
 				elif point.player_owner == player_number: #jak twoje to możesz ulepszyc:
 					update_map_point.rpc(row, column, player_number, true) # true = ulepsz
@@ -158,3 +156,12 @@ func update_map_point(row: int, column: int, owner_player_number: int, should_up
 				point.place_factory()
 			else:
 				point.upgrade_factory()
+
+func has_neighbor_factory(row: int, column: int) -> bool:
+	for p in $Map.get_node("points").get_children():
+		var same_row = (p.row == row and abs(p.column - column) == 1) # sąsiad lewo prawo - ten sam wiersz
+		var same_col = (p.column == column and abs(p.row - row) == 1) # sąsiad góra dół ta sama kolumna
+
+		if (same_row or same_col) and p.factory: #jeśli sąsiad true
+			return true
+	return false
