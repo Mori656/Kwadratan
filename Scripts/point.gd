@@ -35,7 +35,6 @@ func update_visual_state():
 
 func update_visual_start_game():
 	if sprite: #replace for game sprites
-		print("zmieniam")
 		sprite.set_frame_and_progress(2,0)
 		
 

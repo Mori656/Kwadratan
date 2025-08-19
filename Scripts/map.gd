@@ -26,7 +26,6 @@ func roll_and_set_numbers():
 			var number = numbers_pool.pop_back()
 			rolled_numbers.append(number)
 			tile.set_value(number)
-			print(tile.row)
 			
 
 	# Przekazanie danych do klientów

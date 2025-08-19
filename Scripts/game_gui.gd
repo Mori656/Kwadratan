@@ -25,8 +25,6 @@ func update_gui():
 @rpc("any_peer", "call_local")
 func update_player_resources():
 	print("Gracz ", multiplayer.get_unique_id(), " robi update")
-	
-	#Tworzenie gui surowców
 	var player_resources = inventory.get_player_resources(multiplayer.get_unique_id())
 	for i in resource_dict:
 		resource_count[resource_dict[i]].text = str(player_resources[resource_dict[i]])

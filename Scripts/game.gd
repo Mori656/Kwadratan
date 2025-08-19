@@ -16,9 +16,14 @@ func _ready():
 		load_map.rpc(CoopHandler.selected_map)
 		send_players_list_to_clients.rpc(CoopHandler.players_in_game)
 		
+		
 		for player_id in CoopHandler.players_in_game:
 			print(player_id)
 			game_inventory.setup_player_inventory(player_id)
+		
+		#Przygotowanie kart w banku
+		game_inventory.setup_deck()
+		
 		gui.update_gui()
 		
 		# Serwer ustala kolejność tury
