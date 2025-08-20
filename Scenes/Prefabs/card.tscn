@@ -21,6 +21,7 @@ label_settings = SubResource("LabelSettings_iurns")
 horizontal_alignment = 1
 
 [node name="CardDiscription" type="Label" parent="Container"]
+layout_mode = 0
 offset_top = 24.0
 offset_right = 36.0
 offset_bottom = 55.0
