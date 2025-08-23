@@ -14,8 +14,3 @@ script = ExtResource("6_2irst")
 
 [node name="GUI" parent="CanvasLayer" instance=ExtResource("2_gl6un")]
 z_index = 100
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 0.0
-offset_bottom = 0.0
-mouse_filter = 2

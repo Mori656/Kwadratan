@@ -1,7 +1,7 @@
 extends Node2D
 
-var inventory = {0:{"resources":{"wood":25, "iron":25, "oil":25, "coal":25, "uran":25},"cards":{}}}
-var cards_in_deck = 5
+var inventory = {0:{"resources":{"wood":25, "iron":25, "oil":25, "coal":25, "uran":25},"cards":[]}}
+var cards_in_deck = 10
 @onready var card_scene = preload("res://Scenes/Prefabs/card.tscn")
 @onready var gui = $"../CanvasLayer/GUI"
 	
@@ -11,15 +11,18 @@ func setup_deck():
 		var new_card = card_scene.instantiate()
 		new_card.set_card_info("karta", "fajna karta", "robi")
 		#Wstawienie karty do decku
-		inventory[0]["cards"][i] = new_card
+		inventory[0]["cards"].append(new_card)
 		
 func setup_player_inventory(id):
-	var player_inventory = {"resources":{"wood":0, "iron":0, "oil":0, "coal":0, "uran":0},"cards":"karta"}
+	var player_inventory = {"resources":{"wood":0, "iron":0, "oil":0, "coal":0, "uran":0},"cards":[]}
 	inventory[id] = player_inventory
 	rpc("update_bank_inventory",inventory)
 
 func on_dice_rolled(res):
 	rpc_id(1,"give_resource_to_players_by_dice",res,multiplayer.get_unique_id())
+
+func on_card_draw():
+	rpc_id(1,"give_card_to_player",multiplayer.get_unique_id())
 
 @rpc("any_peer","call_local")
 func give_resource_to_players_by_dice(res,requester):
@@ -35,6 +38,13 @@ func give_resource_to_players_by_dice(res,requester):
 		print("Gracz", player, " ma ", inventory[player])
 	rpc("update_bank_inventory", inventory)
 	gui.update_gui()
+	
+@rpc("any_peer","call_local")
+func give_card_to_player(requester):
+	if inventory[0]["cards"].size() > 0:
+		inventory[requester]["cards"].append(inventory[0]["cards"].pop_front())
+		rpc("update_bank_inventory", inventory)
+		gui.update_gui()
 	
 @rpc("any_peer","call_local")
 func update_bank_inventory(new_inventory: Dictionary):
@@ -56,8 +66,13 @@ func get_player_resources(id: int):
 	if inventory.has(id):
 		return inventory[id]["resources"]
 	else:
-		push_error("Player ID %d does not exist in resources." % id)
+		push_error("Nie znaleziono surowców gracza od ID %d" % id)
 		return null
 	
-
+func get_player_cards(id: int):
+	if inventory.has(id):
+		return inventory[id]["cards"]
+	else:
+		push_error("Nie znaleziono kart gracza od ID %d" % id)
+		return null
 	

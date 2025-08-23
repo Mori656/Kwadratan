@@ -19,6 +19,9 @@ extends Control
 @onready var bank_container = $BankResourceContainer
 @onready var bank_container_pos = bank_container.position
 
+@onready var cards_container = $CardsContainer
+@onready var cards_container_pos = cards_container.position
+
 @onready var dice1 = $DiceContainer/DiceButton/Dice1Sprite
 @onready var dice2 = $DiceContainer/DiceButton/Dice2Sprite
 
@@ -29,18 +32,112 @@ var resource_dict = {1:"wood", 2:"iron", 3:"oil", 4:"coal", 5:"uran"}
 @onready var resource_count = {"wood":wood_count, "iron":iron_count, "oil":oil_count, "coal":coal_count, "uran":uran_count}
 @onready var bank_resource_count = {"wood":bank_wood_count, "iron":bank_iron_count, "oil":bank_oil_count, "coal":bank_coal_count, "uran":bank_uran_count}
 
+# zmienne do kart
+var focused_cards = []
+var main_focus_card: CardNode = null
+var selected_card: CardNode = null
+
 func update_gui():
 	print("Uruchamiam update")
 	rpc("update_player_resources")
+	rpc("update_player_cards")
 	
 @rpc("any_peer", "call_local")
 func update_player_resources():
-	print("Gracz ", multiplayer.get_unique_id(), " robi update")
 	var player_resources = inventory.get_player_resources(multiplayer.get_unique_id())
 	var bank_resources = inventory.get_player_resources(0)
 	for i in resource_dict:
 		resource_count[resource_dict[i]].text = str(player_resources[resource_dict[i]])
 		bank_resource_count[resource_dict[i]].text = str(bank_resources[resource_dict[i]])
+		
+@rpc("any_peer", "call_local")
+func update_player_cards():
+	var player_cards = inventory.get_player_cards(multiplayer.get_unique_id())
+	
+	for card in player_cards:
+		if card not in cards_container.get_children():
+			card.focused.connect(_card_focus_handler)
+			card.unfocused.connect(_card_unfocus_handler)
+			card.card_click.connect(_on_card_click)
+			cards_container.add_child(card)
+	
+	_cards_placement()
+
+func _card_focus_handler(card) -> void:
+	focused_cards.append(card)
+	_on_focus_change()
+	pass
+
+func _card_unfocus_handler(card) -> void:
+	if card in focused_cards:
+		card.unhighlight()
+		focused_cards.erase(card)
+	_on_focus_change()
+	pass
+
+func _on_focus_change():
+	var cards_in_container = cards_container.get_children()
+	cards_in_container.reverse()
+	for c in focused_cards:
+		c.unhighlight()
+		
+	for c in cards_in_container:
+		if c in focused_cards:
+			c.highlight()
+			main_focus_card = c
+			return
+func _on_card_click(event,card):
+	if event is InputEventMouseButton and event.pressed and (card == main_focus_card):
+		selected_card = card
+		_cards_placement()
+	
+func _cards_placement():
+	var cards_in_container = cards_container.get_children()
+	var cards_count = cards_in_container.size()
+
+	# Środek wachlarza
+	var center_position = Vector2(85, 340)
+	# Odległość w poziomie
+	var max_spread = 120
+	var max_card_spread = 40
+	var width = min(max_card_spread * (cards_count - 1),max_spread)
+	var selected_card_spred = 60
+	# Maksymalny kąt wachlarza (np. 40 stopni)
+	var max_angle = 20
+	# Promień "półkola" - im większy, tym łagodniejszy łuk
+	var new_step = 0
+	if cards_count > 1:
+		new_step = width/(cards_count - 1)
+	
+	if selected_card:
+		new_step = (width-selected_card_spred)/(cards_count - 1)
+	print(width)
+	var start_pos = 0 - width/2
+	for i in range(cards_count):
+		var card = cards_in_container[i]
+		if selected_card == card:
+			start_pos += selected_card_spred/2
+		# Pozycja karty na łuku
+		var centered_offset_x = start_pos
+		
+		print(start_pos)
+		
+		var pos_x = center_position.x + centered_offset_x 
+		var pos_y = center_position.y + abs(0.2 * centered_offset_x)
+		
+		var angle = 0
+		if centered_offset_x != 0:
+			angle = (centered_offset_x/(max_spread/2.0)) * max_angle
+			print("Połowa zasięgu ",(max_spread/2.0))
+			print("Procent: ", centered_offset_x/(max_spread/2))
+			print(angle)
+		
+		card.position = Vector2(pos_x, pos_y)
+		card.rotation = deg_to_rad(angle)
+		
+		start_pos+=new_step
+		if selected_card == card:
+			start_pos += selected_card_spred/2
 
 func _on_dice_button_pressed() -> void:
 	k1 = randi() % 6 + 1
@@ -75,3 +172,8 @@ func _on_bank_button_toggled(toggled_on: bool) -> void:
 		bank_container_tween.tween_property(bank_container,"position",bank_container_pos ,1)
 	else:
 		bank_container_tween.tween_property(bank_container,"position",bank_container_pos + Vector2(110,0), 1)
+
+
+func _on_draw_card_button_button_up() -> void:
+	inventory.on_card_draw()
+	pass # Replace with function body.
