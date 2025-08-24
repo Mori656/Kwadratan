@@ -1,0 +1,14 @@
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://b00ihv7vo20ls"]
+
+[ext_resource type="Texture2D" uid="uid://bcpwa6ovbtef1" path="res://Assets/kwadratan-tileset.png" id="1_heyap"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lula3"]
+texture = ExtResource("1_heyap")
+texture_margin_left = 16.0
+texture_margin_top = 16.0
+texture_margin_right = 16.0
+texture_margin_bottom = 16.0
+region_rect = Rect2(208, 0, 48, 48)
+
+[resource]
+Panel/styles/panel = SubResource("StyleBoxTexture_lula3")

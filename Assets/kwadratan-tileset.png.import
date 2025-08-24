@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://k7c3h8s51jo3"
-path="res://.godot/imported/test3.png-80406a920ce84cea5580daf7e591d049.ctex"
+uid="uid://bcpwa6ovbtef1"
+path="res://.godot/imported/kwadratan-tileset.png-90d00420776ce4e3de41ac9eb8c6ebf3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Maps/test3.png"
-dest_files=["res://.godot/imported/test3.png-80406a920ce84cea5580daf7e591d049.ctex"]
+source_file="res://Assets/kwadratan-tileset.png"
+dest_files=["res://.godot/imported/kwadratan-tileset.png-90d00420776ce4e3de41ac9eb8c6ebf3.ctex"]
 
 [params]
 

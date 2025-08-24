@@ -23,16 +23,6 @@ func _on_client_button_up() -> void:
 	CoopHandler.start_client()
 	get_tree().change_scene_to_file("res://Scenes/Lobby.tscn")
 	
-	#CoopHandler.start_client()
-
-#func _on_lobby_button_up() -> void:
-#	$MapSelector.show()
-
-#func _on_map_selected(map_path: String):
-	#selected_map_path = map_path
-#	print(selected_map_path)
-#	$MapSelector.hide()
-
 @rpc("authority")
 func change_map(scene_path: String):
 	get_tree().change_scene_to_file(scene_path)

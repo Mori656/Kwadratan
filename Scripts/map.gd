@@ -21,10 +21,12 @@ func roll_and_set_numbers():
 			if numbers_pool.is_empty():
 				numbers_pool = [1,2,3,4,5,6,7,8,9,10,11,12]
 				numbers_pool.shuffle()
+				
 
 			var number = numbers_pool.pop_back()
 			rolled_numbers.append(number)
 			tile.set_value(number)
+			
 
 	# Przekazanie danych do klientów
 	rpc("apply_rolled_numbers", rolled_numbers)

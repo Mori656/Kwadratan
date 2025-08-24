@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://dxot1n64bdhpv" path="res://Scripts/player.gd" id="1_kyqiw"]
 [ext_resource type="Texture2D" uid="uid://dvchr7gpc7u2l" path="res://Assets/icon.svg" id="2_gntrk"]
-[ext_resource type="Script" uid="uid://dp30iiy7ugu3l" path="res://Scripts/player_inventory.gd" id="3_gntrk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kyqiw"]
 
@@ -10,6 +9,19 @@
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/replication_mode = 1
+
+[sub_resource type="GDScript" id="GDScript_kyqiw"]
+script/source = "extends Node2D
+
+var resources = {\"wood\":0, \"iron\":0, \"oil\":0, \"coal\":0, \"uran\":0}
+
+func add_resource(res: String, count: int):
+	if not resources.has(res):
+		resources[res] = 0
+	resources[res] += count
+	print(\"Dodano do ekwipunku: \", count, \" \", res)
+	print(\"Aktualny stan surowca \", res, \" to \", resources[res])
+"
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_kyqiw")
@@ -30,4 +42,4 @@ shape = SubResource("RectangleShape2D_kyqiw")
 replication_config = SubResource("SceneReplicationConfig_dewec")
 
 [node name="Inventory" type="Node2D" parent="."]
-script = ExtResource("3_gntrk")
+script = SubResource("GDScript_kyqiw")

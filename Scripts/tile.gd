@@ -5,8 +5,8 @@ extends Node2D
 		active = value
 		update_visual_state()
 		
-var row: int = 0
-var column: int = 0
+@export var row: int = 0
+@export var column: int = 0
 var value: int = 0
 var resource: int = -1
 @onready var sprite = $AnimatedSprite2D #dziecko sprite tego node
