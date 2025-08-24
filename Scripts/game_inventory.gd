@@ -2,16 +2,13 @@ extends Node2D
 
 var inventory = {0:{"resources":{"wood":25, "iron":25, "oil":25, "coal":25, "uran":25},"cards":[]}}
 var cards_in_deck = 10
-@onready var card_scene = preload("res://Scenes/Prefabs/card.tscn")
 @onready var gui = $"../CanvasLayer/GUI"
 	
 func setup_deck():
 	for i in range(cards_in_deck):
-		#stworzenie karty
-		var new_card = card_scene.instantiate()
-		new_card.set_card_info("karta", "fajna karta", "robi")
 		#Wstawienie karty do decku
-		inventory[0]["cards"].append(new_card)
+		var card = {"title":"karta", "desc":"to jest karta","fun":"to robi"}
+		inventory[0]["cards"].append(card)
 		
 func setup_player_inventory(id):
 	var player_inventory = {"resources":{"wood":0, "iron":0, "oil":0, "coal":0, "uran":0},"cards":[]}
@@ -61,14 +58,15 @@ func take_resource(id: int, res: String, count: int) -> bool:
 func give_resource(id: int, res: String, count: int):
 	inventory[id]["resources"][res] += count
 	print("Zmieniono ",inventory[id]["resources"][res])
-	
+
 func get_player_resources(id: int):
 	if inventory.has(id):
 		return inventory[id]["resources"]
 	else:
 		push_error("Nie znaleziono surowców gracza od ID %d" % id)
 		return null
-	
+
+@rpc("any_peer","call_local")
 func get_player_cards(id: int):
 	if inventory.has(id):
 		return inventory[id]["cards"]

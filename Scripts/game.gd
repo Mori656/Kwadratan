@@ -31,7 +31,7 @@ func _ready():
 		current_turn_index = 0
 		update_turn.rpc(turn_order[current_turn_index])
 		
-func _process(delta):
+func _process(_delta):
 	if Input.is_action_just_pressed("ui_cancel"):
 		if multiplayer.get_multiplayer_peer():
 			multiplayer.get_multiplayer_peer().close() #rozłączenie

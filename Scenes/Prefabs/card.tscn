@@ -38,16 +38,15 @@ text = "tytul"
 label_settings = SubResource("LabelSettings_iurns")
 horizontal_alignment = 1
 
-[node name="CardDiscription" type="Label" parent="Container"]
+[node name="CardDescription" type="Label" parent="Container"]
 layout_mode = 0
 offset_top = 24.0
 offset_right = 36.0
-offset_bottom = 55.0
-text = "opis
-"
+offset_bottom = 89.0
+text = "opis"
 label_settings = SubResource("LabelSettings_iurns")
 horizontal_alignment = 1
-vertical_alignment = 1
+autowrap_mode = 1
 
 [connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]

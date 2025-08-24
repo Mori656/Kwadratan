@@ -21,6 +21,7 @@ extends Control
 
 @onready var cards_container = $CardsContainer
 @onready var cards_container_pos = cards_container.position
+@onready var card_scene = preload("res://Scenes/Prefabs/card.tscn")
 
 @onready var dice1 = $DiceContainer/DiceButton/Dice1Sprite
 @onready var dice2 = $DiceContainer/DiceButton/Dice2Sprite
@@ -54,12 +55,17 @@ func update_player_resources():
 func update_player_cards():
 	var player_cards = inventory.get_player_cards(multiplayer.get_unique_id())
 	
+	for child in cards_container.get_children():
+		if child is CardNode:
+			cards_container.remove_child(child)
+	
 	for card in player_cards:
-		if card not in cards_container.get_children():
-			card.focused.connect(_card_focus_handler)
-			card.unfocused.connect(_card_unfocus_handler)
-			card.card_click.connect(_on_card_click)
-			cards_container.add_child(card)
+		var new_card = card_scene.instantiate()
+		new_card.set_card_info(card["title"],card["desc"],card["fun"])
+		new_card.focused.connect(_card_focus_handler)
+		new_card.unfocused.connect(_card_unfocus_handler)
+		new_card.card_click.connect(_on_card_click)
+		cards_container.add_child(new_card)
 	
 	_cards_placement()
 
@@ -87,9 +93,10 @@ func _on_focus_change():
 			main_focus_card = c
 			return
 func _on_card_click(event,card):
-	if event is InputEventMouseButton and event.pressed and (card == main_focus_card):
-		selected_card = card
-		_cards_placement()
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT and (card == main_focus_card):
+			selected_card = card
+			_cards_placement()
 	
 func _cards_placement():
 	var cards_in_container = cards_container.get_children()
@@ -97,47 +104,46 @@ func _cards_placement():
 
 	# Środek wachlarza
 	var center_position = Vector2(85, 340)
-	# Odległość w poziomie
+	# rozpiętość wachlarza
 	var max_spread = 120
+	#miesce zajmowane przez pojedyncze karty( gdy jest ich malo )
 	var max_card_spread = 40
+	#używana rozpiętość
 	var width = min(max_card_spread * (cards_count - 1),max_spread)
+	#dodatkowe miejsce dla karty która jest wybrana
 	var selected_card_spred = 60
-	# Maksymalny kąt wachlarza (np. 40 stopni)
+	# Maksymalny kąt odchylenia
 	var max_angle = 20
-	# Promień "półkola" - im większy, tym łagodniejszy łuk
+	#Obliczanie odległości między kartami
 	var new_step = 0
 	if cards_count > 1:
 		new_step = width/(cards_count - 1)
-	
-	if selected_card:
-		new_step = (width-selected_card_spred)/(cards_count - 1)
-	print(width)
-	var start_pos = 0 - width/2
+		if selected_card:
+			if width < selected_card_spred:
+				width = min(selected_card_spred,max_spread)
+			new_step = (width-selected_card_spred)/(cards_count - 1)
+		
+	var card_pos = 0 - width/2
 	for i in range(cards_count):
 		var card = cards_in_container[i]
+		#Dodatkowe miejsce dla wybranej karty
 		if selected_card == card:
-			start_pos += selected_card_spred/2
-		# Pozycja karty na łuku
-		var centered_offset_x = start_pos
+			card_pos += selected_card_spred/2.0
 		
-		print(start_pos)
-		
-		var pos_x = center_position.x + centered_offset_x 
-		var pos_y = center_position.y + abs(0.2 * centered_offset_x)
+		var pos_x = center_position.x + card_pos 
+		var pos_y = center_position.y + abs(0.2 * card_pos)
 		
 		var angle = 0
-		if centered_offset_x != 0:
-			angle = (centered_offset_x/(max_spread/2.0)) * max_angle
-			print("Połowa zasięgu ",(max_spread/2.0))
-			print("Procent: ", centered_offset_x/(max_spread/2))
-			print(angle)
+		if card_pos != 0:
+			angle = (card_pos/(max_spread/2.0)) * max_angle
 		
 		card.position = Vector2(pos_x, pos_y)
 		card.rotation = deg_to_rad(angle)
 		
-		start_pos+=new_step
+		#krok kolejnej karty
+		card_pos+=new_step
 		if selected_card == card:
-			start_pos += selected_card_spred/2
+			card_pos += selected_card_spred/2.0
 
 func _on_dice_button_pressed() -> void:
 	k1 = randi() % 6 + 1
@@ -165,7 +171,6 @@ func _on_hide_button_toggled(toggled_on: bool) -> void:
 	else:
 		resources_container_tween.tween_property(resources_container,"position",resources_container_pos + Vector2(0,50), 1)
 
-
 func _on_bank_button_toggled(toggled_on: bool) -> void:
 	var bank_container_tween = create_tween()
 	if toggled_on:
@@ -173,7 +178,13 @@ func _on_bank_button_toggled(toggled_on: bool) -> void:
 	else:
 		bank_container_tween.tween_property(bank_container,"position",bank_container_pos + Vector2(110,0), 1)
 
-
 func _on_draw_card_button_button_up() -> void:
 	inventory.on_card_draw()
 	pass # Replace with function body.
+	
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_RIGHT:
+			selected_card = null
+			_cards_placement()
+		
