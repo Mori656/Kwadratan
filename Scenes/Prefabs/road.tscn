@@ -1,0 +1,58 @@
+[gd_scene load_steps=9 format=3 uid="uid://bg3vpno5mg2o4"]
+
+[ext_resource type="Script" uid="uid://bcjqgi2pvn4pj" path="res://Scripts/road.gd" id="1_dtk37"]
+[ext_resource type="Texture2D" uid="uid://bcpwa6ovbtef1" path="res://Assets/kwadratan-tileset.png" id="3_ojag1"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dtk37"]
+atlas = ExtResource("3_ojag1")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cgr0r"]
+atlas = ExtResource("3_ojag1")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k4xmj"]
+atlas = ExtResource("3_ojag1")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ojag1"]
+atlas = ExtResource("3_ojag1")
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ohc0c"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dtk37")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cgr0r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k4xmj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ojag1")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"new_animation",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vx4y2"]
+size = Vector2(6, 22)
+
+[node name="Node2D" type="Area2D"]
+script = ExtResource("1_dtk37")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(5.96046e-08, -5.96046e-08)
+sprite_frames = SubResource("SpriteFrames_ohc0c")
+
+[node name="CollisionHorizontal" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_vx4y2")

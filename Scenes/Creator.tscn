@@ -1,18 +1,22 @@
-[gd_scene load_steps=5 format=3 uid="uid://dbmt1kxx1vcnc"]
+[gd_scene load_steps=6 format=3 uid="uid://dbmt1kxx1vcnc"]
 
 [ext_resource type="Script" uid="uid://7pu6cujhmxtm" path="res://Scripts/creator.gd" id="1_xpp5i"]
 [ext_resource type="PackedScene" uid="uid://cayg0x1jfojf6" path="res://Scenes/Prefabs/tile.tscn" id="2_xeo3l"]
 [ext_resource type="PackedScene" uid="uid://1cy5m1ykp5dn" path="res://Scenes/Prefabs/point.tscn" id="3_1qws4"]
 [ext_resource type="Script" uid="uid://ceygssjee58j1" path="res://Scripts/camera_movement.gd" id="4_1qws4"]
+[ext_resource type="PackedScene" uid="uid://bg3vpno5mg2o4" path="res://Scenes/Prefabs/road.tscn" id="4_d38xx"]
 
 [node name="Main" type="Node2D" groups=["points"]]
 script = ExtResource("1_xpp5i")
 map_tile = ExtResource("2_xeo3l")
 map_point = ExtResource("3_1qws4")
+map_road = ExtResource("4_d38xx")
 
 [node name="tiles" type="Node2D" parent="."]
 
 [node name="points" type="Node2D" parent="."]
+
+[node name="roads" type="Node2D" parent="."]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0

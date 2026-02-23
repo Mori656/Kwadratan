@@ -1,7 +1,9 @@
 extends Node2D
 
 @export var map_tile: PackedScene
-@export var map_point: PackedScene 
+@export var map_point: PackedScene
+@export var map_road: PackedScene
+ 
 @export var tile_count_h: int = 10
 @export var tile_count_w: int = 20
 var screensize = Vector2i(640,360)
@@ -12,6 +14,7 @@ var offsets = [ #do sprawdzania sąsiedztwa
 	Vector2i(-1, -1)
 ]
 @onready var GUI = $CanvasLayer
+var tilesize = 32
 
 func _ready():
 	print("EKRAN" , screensize)
@@ -19,8 +22,8 @@ func _ready():
 		for width in range(tile_count_w):
 			var tile = map_tile.instantiate()
 			#pozycja i wartości dla kafelków
-			tile.position = Vector2(width * 16 + 8, 8 + (16 * height))
-			tile.position += Vector2(screensize.x /2 - tile_count_w/2*16 +8, screensize.y /2 - tile_count_h/2*16 +8 )
+			tile.position = Vector2(width * tilesize, tilesize * height)
+			tile.position += Vector2(screensize.x /2 - tile_count_w/2* tilesize, screensize.y /2 - tile_count_h/2* tilesize)
 			tile.row = width
 			tile.column = height
 			tile.value = 0  # narazie 0
@@ -32,14 +35,14 @@ func _ready():
 			tile.connect("input_event", Callable(self, "_on_tile_clicked").bind(tile))
 			# NOWA LINIA: Podpinamy sygnał mouse_entered (dla przeciągania/rysowania)
 			tile.connect("mouse_entered", Callable(self, "_on_tile_mouse_entered").bind(tile))
-			#tile.add_to_group("tiles") #do iteracji
+			
 			
 	# dodajemy punkt w lewym górnym rogu kafla 
 	for height in range(tile_count_h + 1):
 			for width in range(tile_count_w + 1):
 				var point = map_point.instantiate()
-				point.position = Vector2(width * 16 - 8 + 8, 8 + (16  * height) - 8) 
-				point.position += Vector2(screensize.x /2 - tile_count_w/2*16 +8, screensize.y /2 - tile_count_h/2*16 +8 )
+				point.position = Vector2(width * tilesize - (tilesize/2) , tilesize  * height - (tilesize/2)) 
+				point.position += Vector2(screensize.x /2 - tile_count_w/2*tilesize, screensize.y /2 - tile_count_h/2* tilesize)
 				point.row = width
 				point.column = height
 				
@@ -56,7 +59,7 @@ func _ready():
 				point.name = "Point" + "[" + str(point.row) + "]" + "[" + str(point.column) + "]"
 				$points.add_child(point)
 				point.owner = self # do zapisu mapy
-				#point.add_to_group("points") #do iteracji
+	generate_roads()
 
 func _process(delta):
 	if Input.is_action_just_pressed("ui_cancel"):
@@ -149,3 +152,53 @@ func generate_map_thumbnail(path: String):
 	var img = viewport.get_texture().get_image()
 	img.save_png(path)
 	#GUI.visible = true
+	
+
+# GENEROWANIE DRÓG 
+func generate_roads():
+	# Czyścimy stare drogi
+	if has_node("roads"):
+		for r in $roads.get_children():
+			r.queue_free()
+	
+	for point in $points.get_children():
+		# 1. DROGA W PRAWO (Pozioma)
+		# Sprawdzamy, czy nie jesteśmy w ostatniej kolumnie punktów
+		if point.row < tile_count_w:
+			var right_point = get_point(point.row + 1, point.column)
+			if right_point:
+				create_road(point, right_point, false)
+		
+		# 2. DROGA W DÓŁ (Pionowa)
+		# Sprawdzamy, czy nie jesteśmy w ostatnim rzędzie punktów
+		if point.column < tile_count_h:
+			var bottom_point = get_point(point.row, point.column + 1)
+			if bottom_point:
+				create_road(point, bottom_point, true)
+
+func get_point(r: int, c: int):
+	for p in $points.get_children():
+		if p.row == r and p.column == c:
+			return p
+	return null
+
+func create_road(p1, p2, vertical: bool):
+	var road = map_road.instantiate()
+	
+	road.point_a_path = p1.get_path()
+	road.point_b_path = p2.get_path()
+	road.is_vertical = vertical
+	
+	# Ustawiamy pozycję dokładnie w połowie drogi między punktami
+	road.position = (p1.position + p2.position) / 2
+	
+	if vertical:
+		road.rotation_degrees = 0
+	else:
+		road.rotation_degrees = 90 # Na wszelki wypadek reset rotacji
+		
+	$roads.add_child(road)
+	road.owner = self # do zapisu mapy
+
+	
+	

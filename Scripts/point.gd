@@ -19,6 +19,7 @@ var value: int = 0
 @export var player_owner: int = -1 #brak właściciela
 @export var factory: bool = false
 @export var upgraded_factory: bool = false
+@export var connected_to_road: bool = false
 
 @onready var sprite = $AnimatedSprite2D #dziecko sprite tego node
 
@@ -58,3 +59,6 @@ func upgrade_factory():
 
 func set_point_owner(ownerId: int):
 	player_owner = ownerId
+	
+func connect_to_roat():
+	connected_to_road = true
