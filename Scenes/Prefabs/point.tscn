@@ -1,20 +1,38 @@
-[gd_scene load_steps=17 format=3 uid="uid://1cy5m1ykp5dn"]
+[gd_scene load_steps=21 format=3 uid="uid://1cy5m1ykp5dn"]
 
 [ext_resource type="Script" uid="uid://4j8twmoefcuc" path="res://Scripts/point.gd" id="1_4my8v"]
-[ext_resource type="Texture2D" uid="uid://xaxqca1pceoy" path="res://Assets/tilest-x16tile.png" id="2_4my8v"]
 [ext_resource type="Texture2D" uid="uid://bcpwa6ovbtef1" path="res://Assets/kwadratan-tileset.png" id="3_sdy3t"]
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_4my8v"]
+load_path = "res://.godot/imported/tilest-x16tile.png-b4b4a2a625235c8c387357d203f944dd.ctex"
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_4my8v"]
-atlas = ExtResource("2_4my8v")
+atlas = SubResource("CompressedTexture2D_4my8v")
 region = Rect2(56, 1, 4, 4)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sdy3t"]
-atlas = ExtResource("2_4my8v")
+atlas = SubResource("CompressedTexture2D_4my8v")
 region = Rect2(56, 33, 4, 4)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3f5s0"]
 atlas = ExtResource("3_sdy3t")
 region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fijy8"]
+atlas = ExtResource("3_sdy3t")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0bmgm"]
+atlas = ExtResource("3_sdy3t")
+region = Rect2(64, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xwoie"]
+atlas = ExtResource("3_sdy3t")
+region = Rect2(64, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ea4mw"]
+atlas = ExtResource("3_sdy3t")
+region = Rect2(64, 48, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ohc0c"]
 atlas = ExtResource("3_sdy3t")
@@ -59,6 +77,18 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_3f5s0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fijy8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0bmgm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xwoie")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ea4mw")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ohc0c")

@@ -41,11 +41,14 @@ func update_visual_start_game():
 
 func update_visual_game():
 	if sprite:
-		if !upgraded_factory: #zwykła fabryka
-			sprite.frame = 3 + player_owner # na podstawie ID gracza zmieniamy sprite
-			sprite.move_local_y(-5) #zeby prosto bylo 
-		else: #ulepszona fabryka
+		if !upgraded_factory and factory: #zwykła fabryka
 			sprite.frame = 7 + player_owner # na podstawie ID gracza zmieniamy sprite
+			sprite.move_local_y(-5) #zeby prosto bylo 
+		if upgraded_factory: #ulepszona fabryka
+			sprite.frame = 11 + player_owner # na podstawie ID gracza zmieniamy sprite
+		
+		if !upgraded_factory and !factory:
+			sprite.frame = 3+ player_owner
 
 func place_factory():
 	if !factory:

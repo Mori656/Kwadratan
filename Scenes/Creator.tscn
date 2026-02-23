@@ -15,8 +15,10 @@ map_road = ExtResource("4_d38xx")
 [node name="tiles" type="Node2D" parent="."]
 
 [node name="points" type="Node2D" parent="."]
+z_index = 2
 
 [node name="roads" type="Node2D" parent="."]
+z_index = 1
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0

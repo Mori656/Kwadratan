@@ -184,10 +184,14 @@ func get_point(r: int, c: int):
 
 func create_road(p1, p2, vertical: bool):
 	var road = map_road.instantiate()
+	$roads.add_child(road)
+	road.owner = self # do zapisu mapy
 	
-	road.point_a_path = p1.get_path()
-	road.point_b_path = p2.get_path()
+	road.point_a_path = "../../points/" + p1.name
+	road.point_b_path = "../../points/" + p2.name
+	
 	road.is_vertical = vertical
+	road.name = "Road_from_" + str(p1.row) + "_" + str(p1.column) + "_to_" + str(p2.row) + "_" + str(p2.column) #nazwa drogi
 	
 	# Ustawiamy pozycję dokładnie w połowie drogi między punktami
 	road.position = (p1.position + p2.position) / 2
@@ -195,10 +199,6 @@ func create_road(p1, p2, vertical: bool):
 	if vertical:
 		road.rotation_degrees = 0
 	else:
-		road.rotation_degrees = 90 # Na wszelki wypadek reset rotacji
+		road.rotation_degrees = 90
 		
-	$roads.add_child(road)
-	road.owner = self # do zapisu mapy
-
-	
 	

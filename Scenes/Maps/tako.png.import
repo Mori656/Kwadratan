@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://uwp006knj8um"
-path="res://.godot/imported/wawa.png-58d109fd897eb02906fd5bcc0e3494a6.ctex"
+uid="uid://ugiidjpxhcaw"
+path="res://.godot/imported/tako.png-8992094049eae825de7cb8f088c86cc5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Maps/wawa.png"
-dest_files=["res://.godot/imported/wawa.png-58d109fd897eb02906fd5bcc0e3494a6.ctex"]
+source_file="res://Scenes/Maps/tako.png"
+dest_files=["res://.godot/imported/tako.png-8992094049eae825de7cb8f088c86cc5.ctex"]
 
 [params]
 
