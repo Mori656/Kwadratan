@@ -1,11 +1,15 @@
-[gd_scene load_steps=6 format=3 uid="uid://c14xj5cuf1xce"]
+[gd_scene load_steps=8 format=3 uid="uid://c14xj5cuf1xce"]
 
 [ext_resource type="Script" uid="uid://dbfp7tw6eyadc" path="res://Scripts/game_gui.gd" id="1_lw6sg"]
 [ext_resource type="SpriteFrames" uid="uid://c57xudkpyk0gf" path="res://Assets/Styles/dice_state.tres" id="2_fn00h"]
 [ext_resource type="Theme" uid="uid://b00ihv7vo20ls" path="res://Assets/Styles/Gui.tres" id="2_to364"]
 [ext_resource type="Texture2D" uid="uid://bcpwa6ovbtef1" path="res://Assets/kwadratan-tileset.png" id="3_fn00h"]
+[ext_resource type="Script" uid="uid://cvincv7mrhj3w" path="res://Scenes/card_deposit_container.gd" id="5_byx0o"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_lw6sg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fn00h"]
+size = Vector2(441, 249)
 
 [node name="GUI" type="Control"]
 layout_mode = 3
@@ -265,6 +269,13 @@ offset_right = 634.0
 offset_bottom = 319.0
 text = "Draw
 "
+
+[node name="CardDepositContainer" type="Area2D" parent="."]
+script = ExtResource("5_byx0o")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CardDepositContainer"]
+position = Vector2(259.5, 139.5)
+shape = SubResource("RectangleShape2D_fn00h")
 
 [connection signal="pressed" from="DiceContainer/DiceButton" to="." method="_on_dice_button_pressed"]
 [connection signal="toggled" from="BankResourceContainer/BankButton" to="." method="_on_bank_button_toggled"]
