@@ -34,9 +34,16 @@ var resource_dict = {1:"wood", 2:"iron", 3:"oil", 4:"coal", 5:"uran"}
 @onready var bank_resource_count = {"wood":bank_wood_count, "iron":bank_iron_count, "oil":bank_oil_count, "coal":bank_coal_count, "uran":bank_uran_count}
 
 # zmienne do kart
+@onready var card_deposit_container: Area2D = $CardDepositContainer
 var focused_cards = []
 var main_focus_card: CardNode = null
 var selected_card: CardNode = null
+var dragging = false
+var drag_offset = Vector2.ZERO
+
+func _process(delta):
+	if dragging:
+		selected_card.global_position = get_global_mouse_position() + drag_offset
 
 func update_gui():
 	print("Uruchamiam update")
@@ -61,25 +68,33 @@ func update_player_cards():
 	
 	for card in player_cards:
 		var new_card = card_scene.instantiate()
-		new_card.set_card_info(card["title"],card["desc"],card["fun"])
+		new_card.set_card_info(card["id"],card["title"],card["desc"],card["fun"])
 		new_card.focused.connect(_card_focus_handler)
 		new_card.unfocused.connect(_card_unfocus_handler)
 		new_card.card_click.connect(_on_card_click)
+		new_card.card_used.connect(_on_card_used)
 		cards_container.add_child(new_card)
 	
+		if selected_card != null:
+			if selected_card["id"] == new_card["id"]:
+				selected_card = new_card
+	
 	_cards_placement()
+
+func _on_card_used(card) -> void:
+	await inventory.on_card_used(card["id"])
+	selected_card = null
+	update_player_cards()
 
 func _card_focus_handler(card) -> void:
 	focused_cards.append(card)
 	_on_focus_change()
-	pass
 
 func _card_unfocus_handler(card) -> void:
 	if card in focused_cards:
 		card.unhighlight()
 		focused_cards.erase(card)
 	_on_focus_change()
-	pass
 
 func _on_focus_change():
 	var cards_in_container = cards_container.get_children()
@@ -92,16 +107,24 @@ func _on_focus_change():
 			c.highlight()
 			main_focus_card = c
 			return
+			
 func _on_card_click(event,card):
-	if event is InputEventMouseButton and event.pressed:
-		if event.button_index == MOUSE_BUTTON_LEFT and (card == main_focus_card):
-			selected_card = card
-			_cards_placement()
-	
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT :
+			if event.pressed and (card == main_focus_card):
+				selected_card = card
+				dragging = true
+				drag_offset = card.global_position - get_global_mouse_position()
+			else:
+				dragging = false
+				card.check_drop()
+				_cards_placement()
+
+
+				
 func _cards_placement():
 	var cards_in_container = cards_container.get_children()
 	var cards_count = cards_in_container.size()
-
 	# Środek wachlarza
 	var center_position = Vector2(85, 340)
 	# rozpiętość wachlarza
@@ -127,7 +150,7 @@ func _cards_placement():
 	for i in range(cards_count):
 		var card = cards_in_container[i]
 		#Dodatkowe miejsce dla wybranej karty
-		if selected_card == card:
+		if selected_card == card and cards_count > 1:
 			card_pos += selected_card_spred/2.0
 		
 		var pos_x = center_position.x + card_pos 

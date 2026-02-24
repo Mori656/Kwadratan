@@ -7,7 +7,7 @@ var cards_in_deck = 10
 func setup_deck():
 	for i in range(cards_in_deck):
 		#Wstawienie karty do decku
-		var card = {"title":"karta", "desc":"to jest karta","fun":"to robi"}
+		var card = {"id":i,"title":"karta","desc":"to jest karta","fun":"to robi"}
 		inventory[0]["cards"].append(card)
 		
 func setup_player_inventory(id):
@@ -21,6 +21,9 @@ func on_dice_rolled(res):
 func on_card_draw():
 	rpc_id(1,"give_card_to_player",multiplayer.get_unique_id())
 
+func on_card_used(id):
+	rpc_id(1,"remove_used_card",multiplayer.get_unique_id(),id)
+	
 @rpc("any_peer","call_local")
 func give_resource_to_players_by_dice(res,requester):
 	print("Przydzialanie surowców")
@@ -42,7 +45,17 @@ func give_card_to_player(requester):
 		inventory[requester]["cards"].append(inventory[0]["cards"].pop_front())
 		rpc("update_bank_inventory", inventory)
 		gui.update_gui()
-	
+		
+@rpc("any_peer","call_local")
+func remove_used_card(requester,card_id):
+	for card in inventory[requester]["cards"]:
+		print(card)
+		if card["id"] == card_id:
+			inventory[requester]["cards"].erase(card)
+			rpc("update_bank_inventory", inventory)
+			gui.update_gui()
+			return null
+
 @rpc("any_peer","call_local")
 func update_bank_inventory(new_inventory: Dictionary):
 	inventory = new_inventory
