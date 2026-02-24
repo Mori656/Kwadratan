@@ -179,7 +179,11 @@ func request_place_road(road_name: String):
 			
 			# SPRAWDZENIE Czy którykolwiek punkt należy do gracza
 			if p1.player_owner == player_number or p2.player_owner == player_number:
-				update_map_road.rpc(road_name, player_number)
+				#sprawdzenie czy punkt przynależy do innego gracza.
+				if (p1.player_owner != -1 and p1.player_owner != player_number) or (p2.player_owner != -1 and p2.player_owner != player_number):
+					print("Nie możesz tu budować! Punkt przynależy do innego gracza")
+				else:
+					update_map_road.rpc(road_name, player_number)
 			else:
 				print("Nie możesz tu budować! Droga musi łączyć się z Twoim punktem/fabryką.")
 
@@ -201,8 +205,10 @@ func update_map_road(road_name: String, owner_player_number: int):
 	
 	if road:
 		print("Nowy właściciel drogi i punktów: ", owner_player_number)
-		road.player_owner = owner_player_number
-		road.update_visual_game()
+		if(road.player_owner != owner_player_number):
+			road.player_owner = owner_player_number
+			road.update_visual_game()
+		
 		
 		var p1 = road.get_node(road.point_a_path)
 		var p2 = road.get_node(road.point_b_path)
