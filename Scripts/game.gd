@@ -46,14 +46,17 @@ func load_map(map_path: String):
 	$".".add_child(map_instance)
 	print("Mapa '%s' została pomyślnie załadowana." % map_path)
 	
-	# Łączenie tile i pointów (obsługa kliknięć)
+	# Łączenie tile, pointów i dróg (obsługa kliknięć)
 	for tile in map_instance.get_node("tiles").get_children():
 		tile.connect("input_event", Callable(self, "_on_tile_clicked").bind(tile))
 
 	for point in $Map.get_node("points").get_children():
 		point.connect("input_event", Callable(self, "_on_point_clicked").bind(point))
 		point.update_visual_start_game() #zmiana wyglądu na kolej
-
+	
+	for road in map_instance.get_node("roads").get_children():
+		road.connect("input_event", Callable(self, "_on_road_clicked").bind(road))
+		
 # AKTUALIZOWANIE TURY WSZĘDZIE
 @rpc("any_peer", "call_local", "reliable")
 func update_turn(peer_id: int):
@@ -120,6 +123,11 @@ func _on_tile_clicked(_viewport, event, _shape_idx, tile):
 func _on_point_clicked(_viewport, event, _shape_idx, point):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		request_place_factory.rpc_id(1, point.row, point.column)
+
+func _on_road_clicked(_viewport, event, _shape_idx, road):
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		print("Klikam drogę: ", road.name)
+		request_place_road.rpc_id(1, road.name) # Wysyłamy prośbę do serwera, nazwa obiektu jako ID
 		
 @rpc("any_peer", "call_local", "reliable")
 func request_place_factory(row: int, column: int):
@@ -137,7 +145,7 @@ func request_place_factory(row: int, column: int):
 		### to ma się wykonać kiedy zaakceptuje host
 		for point in $Map.get_node("points").get_children():
 			if point.row == row and point.column == column:
-				if not point.factory and point.player_owner == -1: # Jeśli można zbudować
+				if not point.factory: # Jeśli można zbudować
 					# sprawdź sąsiadów (odległość 1)
 					if has_neighbor_factory(row, column):
 						print("Nie można postawić – obok już jest fabryka!")
@@ -150,6 +158,35 @@ func request_place_factory(row: int, column: int):
 		print("to nie jest tura tego gracza")
 		return
 
+@rpc("any_peer", "call_local", "reliable")
+func request_place_road(road_name: String):
+	if not multiplayer.is_server():
+		return
+		
+	var requester_id = multiplayer.get_remote_sender_id()
+	if requester_id == 0:
+		requester_id = multiplayer.get_unique_id()
+		
+	var player_number = current_turn_index
+	
+	if requester_id == turn_order[current_turn_index]:
+		var road = $Map.get_node("roads").get_node_or_null(road_name)
+		
+		if road and road.player_owner == -1:
+			# Punkty końcowe drogi
+			var p1 = road.get_node(road.point_a_path)
+			var p2 = road.get_node(road.point_b_path)
+			
+			# SPRAWDZENIE Czy którykolwiek punkt należy do gracza
+			if p1.player_owner == player_number or p2.player_owner == player_number:
+				#sprawdzenie czy punkt przynależy do innego gracza.
+				if (p1.player_owner != -1 and p1.player_owner != player_number) or (p2.player_owner != -1 and p2.player_owner != player_number):
+					print("Nie możesz tu budować! Punkt przynależy do innego gracza")
+				else:
+					update_map_road.rpc(road_name, player_number)
+			else:
+				print("Nie możesz tu budować! Droga musi łączyć się z Twoim punktem/fabryką.")
+
 #WSZYSCY (wykonują polecenie od hosta - aktualizacja planszy
 @rpc("any_peer", "call_local", "reliable")
 func update_map_point(row: int, column: int, owner_player_number: int, should_upgrade: bool):
@@ -161,6 +198,28 @@ func update_map_point(row: int, column: int, owner_player_number: int, should_up
 				point.place_factory()
 			else:
 				point.upgrade_factory()
+
+@rpc("any_peer", "call_local", "reliable")
+func update_map_road(road_name: String, owner_player_number: int):
+	var road = $Map.get_node("roads").get_node_or_null(road_name)
+	
+	if road:
+		print("Nowy właściciel drogi i punktów: ", owner_player_number)
+		if(road.player_owner != owner_player_number):
+			road.player_owner = owner_player_number
+			road.update_visual_game()
+		
+		
+		var p1 = road.get_node(road.point_a_path)
+		var p2 = road.get_node(road.point_b_path)
+		
+		# przypisujemy punkty na końcach drogi do gracza stawiającego drogę
+		p1.set_point_owner(owner_player_number)
+		p2.set_point_owner(owner_player_number)
+		p1.update_visual_game()
+		p2.update_visual_game()
+
+
 
 func has_neighbor_factory(row: int, column: int) -> bool:
 	for p in $Map.get_node("points").get_children():
