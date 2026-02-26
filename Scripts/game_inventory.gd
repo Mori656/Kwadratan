@@ -7,7 +7,7 @@ var cards_in_deck = 10
 func setup_deck():
 	for i in range(cards_in_deck):
 		#Wstawienie karty do decku
-		var card = {"id":i,"title":"karta","desc":"to jest karta","fun":"to robi"}
+		var card = {"id":i,"title":"karta","desc":"to jest karta","fun":"add_wood"}
 		inventory[0]["cards"].append(card)
 		
 func setup_player_inventory(id):
@@ -23,6 +23,9 @@ func on_card_draw():
 
 func on_card_used(id):
 	rpc_id(1,"remove_used_card",multiplayer.get_unique_id(),id)
+
+func on_card_used_add_resource(res):
+	rpc_id(1,"give_resource_to_players_by_card",res,multiplayer.get_unique_id())
 	
 @rpc("any_peer","call_local")
 func give_resource_to_players_by_dice(res,requester):
@@ -36,6 +39,15 @@ func give_resource_to_players_by_dice(res,requester):
 		print("Bank nie ma wystarczającej ilości zasobu: ", res)
 	for player in inventory:
 		print("Gracz", player, " ma ", inventory[player])
+	rpc("update_bank_inventory", inventory)
+	gui.update_gui()
+	
+@rpc("any_peer","call_local")
+func give_resource_to_players_by_card(res,requester):
+	if take_resource(0, res, 1): # zabieramy 1 surowiec z banku
+		give_resource(requester,res,1)
+	else:
+		print("Bank nie ma wystarczającej ilości zasobu: ", res)
 	rpc("update_bank_inventory", inventory)
 	gui.update_gui()
 	
