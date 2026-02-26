@@ -115,10 +115,12 @@ func _on_card_click(event,card):
 				selected_card = card
 				dragging = true
 				drag_offset = card.global_position - get_global_mouse_position()
+				accept_event()
 			else:
 				dragging = false
 				card.check_drop()
 				_cards_placement()
+				accept_event()
 
 
 				
