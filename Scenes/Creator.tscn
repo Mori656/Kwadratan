@@ -12,6 +12,20 @@ map_tile = ExtResource("2_xeo3l")
 map_point = ExtResource("3_1qws4")
 map_road = ExtResource("4_d38xx")
 
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+offset_right = 900.0
+offset_bottom = 500.0
+
+[node name="ColorRect" type="ColorRect" parent="ColorRect"]
+visible = false
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 888.0
+offset_bottom = 488.0
+color = Color(0.956955, 0.822915, 1, 1)
+
 [node name="tiles" type="Node2D" parent="."]
 
 [node name="points" type="Node2D" parent="."]
@@ -22,6 +36,10 @@ z_index = 1
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
+limit_left = 0
+limit_top = 0
+limit_right = 900
+limit_bottom = 500
 script = ExtResource("4_1qws4")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
