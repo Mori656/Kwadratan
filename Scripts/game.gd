@@ -145,6 +145,12 @@ func request_place_factory(row: int, column: int):
 		### to ma się wykonać kiedy zaakceptuje host
 		for point in $Map.get_node("points").get_children():
 			if point.row == row and point.column == column:
+				
+				# Czy punkt nie jest na morzu - stan z kreatora
+				if not point.active:
+					print("Nie możesz tu budować na morzu " + ':)' )
+					return
+				
 				if not point.factory: # Jeśli można zbudować
 					# sprawdź sąsiadów (odległość 1)
 					if has_neighbor_factory(row, column):

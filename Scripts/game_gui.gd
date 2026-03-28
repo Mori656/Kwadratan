@@ -41,6 +41,8 @@ var selected_card: CardNode = null
 var dragging = false
 var drag_offset = Vector2.ZERO
 
+@onready var turn_order = CoopHandler.players_in_game.keys() #kolejnośc graczy
+
 func _process(delta):
 	if dragging:
 		selected_card.global_position = get_global_mouse_position() + drag_offset
@@ -177,17 +179,46 @@ func _on_dice_button_pressed() -> void:
 	dice1.frame = k1 - 1
 	dice2.frame = k2 - 1
 	
-	give_resources()
+	#żądanie przydziału zasobów
+	rpc_id(1, "give_resources")
 	pass
 
+
+@rpc("any_peer", "call_local")
 func give_resources() -> void:
-	map_tiles = get_parent().get_parent().get_node("Map/tiles")
-	#inventory.on_dice_rolled(resource_dict[1])
-	for tile in map_tiles.get_children():
-		if tile.get_value() == k1 + k2:
-			inventory.on_dice_rolled(resource_dict[tile.get_resource()])
-			pass
-		pass
+ 
+	if not multiplayer.is_server():
+		return
+	var dice_sum = k1 + k2
+
+	var map_points = get_parent().get_parent().get_node("Map/points").get_children()
+
+	for point in map_points:
+		# sprawdzamy czy jest fabryka kogoś
+		if point.factory and point.player_owner != -1:
+			# Pobieramy ID gracza który posiada punkt
+			var player_peer_id = turn_order[point.player_owner]
+			#Sprawdzamy wszystkie kafelki sąsiadujące z tym punktem
+			for tile_coords in point.neighboring_tiles:
+				var tile = get_tile_by_coords(tile_coords.y, tile_coords.x)
+				
+				if tile and tile.active and tile.get_value() == dice_sum:  #kafelek istnieje, jest lądem i value się zgadza
+					var amount = 2 if point.upgraded_factory else 1 #mnożnik dla upgrade
+					var res_name = resource_dict[tile.get_resource()]
+					
+					inventory.give_resource_to_players_by_dice(res_name, player_peer_id, amount)#rozdaj surowce
+
+# Funkcja pomocnicza -> z row i column na obiekt
+func get_tile_by_coords(r: int, c: int):
+	# Pobieramy listę wszystkich kafelków za każdym razem
+	var tiles_list = get_parent().get_parent().get_node("Map/tiles").get_children()
+	for tile in tiles_list:
+		if tile.row == r and tile.column == c:
+			return tile    
+	return null
+
+
+
 
 func _on_hide_button_toggled(toggled_on: bool) -> void:
 	var resources_container_tween = create_tween()
@@ -212,4 +243,3 @@ func _input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			selected_card = null
 			_cards_placement()
-		

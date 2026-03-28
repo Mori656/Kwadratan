@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://o7kl1bok8ctk"
-path="res://.godot/imported/testy.png-0e5b7e5ac4f88dd6a2e272b148caa988.ctex"
+uid="uid://ca242vviq7kc0"
+path="res://.godot/imported/testowa.png-ba1685515d65a3531f847fb1bc16e485.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Maps/testy.png"
-dest_files=["res://.godot/imported/testy.png-0e5b7e5ac4f88dd6a2e272b148caa988.ctex"]
+source_file="res://Scenes/Maps/testowa.png"
+dest_files=["res://.godot/imported/testowa.png-ba1685515d65a3531f847fb1bc16e485.ctex"]
 
 [params]
 

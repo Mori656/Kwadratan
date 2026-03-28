@@ -1,24 +1,59 @@
-[gd_scene load_steps=8 format=3 uid="uid://cayg0x1jfojf6"]
+[gd_scene load_steps=13 format=3 uid="uid://cayg0x1jfojf6"]
 
 [ext_resource type="Script" uid="uid://csj4kcyetgp40" path="res://Scripts/tile.gd" id="1_n3f48"]
 [ext_resource type="Texture2D" uid="uid://bcpwa6ovbtef1" path="res://Assets/kwadratan-tileset.png" id="2_61x6h"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xtn5h"]
-atlas = ExtResource("2_61x6h")
-region = Rect2(160, 128, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e672h"]
 atlas = ExtResource("2_61x6h")
 region = Rect2(192, 128, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_61x6h"]
+atlas = ExtResource("2_61x6h")
+region = Rect2(0, 128, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nij7r"]
+atlas = ExtResource("2_61x6h")
+region = Rect2(32, 128, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qlxla"]
+atlas = ExtResource("2_61x6h")
+region = Rect2(64, 128, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5sgbj"]
+atlas = ExtResource("2_61x6h")
+region = Rect2(96, 128, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d1aft"]
+atlas = ExtResource("2_61x6h")
+region = Rect2(128, 128, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xtn5h"]
+atlas = ExtResource("2_61x6h")
+region = Rect2(160, 128, 32, 32)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_nij7r"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_xtn5h")
+"texture": SubResource("AtlasTexture_e672h")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_e672h")
+"texture": SubResource("AtlasTexture_61x6h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nij7r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qlxla")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5sgbj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d1aft")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xtn5h")
 }],
 "loop": true,
 "name": &"default",
