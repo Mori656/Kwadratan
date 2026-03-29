@@ -1,9 +1,22 @@
 extends Node2D
 
 var inventory = {0:{"resources":{"wood":25, "iron":25, "oil":25, "coal":25, "uran":25},"cards":[]}}
+const COSTS = {
+	"factory": {"wood": 1, "iron": 1, "coal": 1},
+	"nuclear_power_plant": {"iron": 3, "uran": 3},
+	"road": {"wood": 1, "oil": 1}
+}
 var cards_in_deck = 10
 @onready var gui = $"../CanvasLayer/GUI"
-	
+
+func can_afford(player_id: int, building_type: String) -> bool:
+	var cost = COSTS[building_type]
+	for res in cost:
+		if inventory[player_id]["resources"][res] < cost[res]:
+			return false
+	return true
+
+
 func setup_deck():
 	for i in range(cards_in_deck):
 		#Wstawienie karty do decku
@@ -11,7 +24,7 @@ func setup_deck():
 		inventory[0]["cards"].append(card)
 		
 func setup_player_inventory(id):
-	var player_inventory = {"resources":{"wood":0, "iron":0, "oil":0, "coal":0, "uran":0},"cards":[]}
+	var player_inventory = {"resources":{"wood":10, "iron":10, "oil":10, "coal":10, "uran":10},"cards":[]}
 	inventory[id] = player_inventory
 	rpc("update_bank_inventory",inventory)
 

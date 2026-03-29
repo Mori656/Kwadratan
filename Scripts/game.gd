@@ -141,28 +141,46 @@ func request_place_factory(row: int, column: int):
 
 	var player_number = current_turn_index #numer gracza  - do kolorów
 	# Sprawdzamy, czy prośbę wysłał gracz, którego jest tura
-	if requester_id == turn_order[current_turn_index]:
-		### to ma się wykonać kiedy zaakceptuje host
-		for point in $Map.get_node("points").get_children():
-			if point.row == row and point.column == column:
-				
-				# Czy punkt nie jest na morzu - stan z kreatora
-				if not point.active:
-					print("Nie możesz tu budować na morzu " + ':)' )
-					return
-				
-				if not point.factory: # Jeśli można zbudować
-					# sprawdź sąsiadów (odległość 1)
-					if has_neighbor_factory(row, column):
-						print("Nie można postawić – obok już jest fabryka!")
-						return
-				# jeśli brak sąsiadów -> buduj
-					update_map_point.rpc(row, column, player_number, false) #zbuduj
-				elif point.player_owner == player_number: #jak twoje to możesz ulepszyc:
-					update_map_point.rpc(row, column, player_number, true) # true = ulepsz
-	else:
-		print("to nie jest tura tego gracza")
+	if requester_id != turn_order[current_turn_index]:
+		print("to nie tura tego gracza!")
 		return
+		
+	### to ma się wykonać kiedy zaakceptuje host
+	var cost = 0
+	for point in $Map.get_node("points").get_children():
+		if point.row == row and point.column == column:
+				
+		# Czy punkt nie jest na morzu - stan z kreatora
+			if not point.active:
+				print("Nie możesz tu budować na morzu " + ':)' )
+				return
+				
+			if not point.factory: # Jeśli można zbudować
+				# sprawdź sąsiadów (odległość 1)
+				if has_neighbor_factory(row, column):
+					print("Nie można postawić – obok już jest fabryka!")
+					return
+				# jeśli brak sąsiadów -> buduj
+				if not game_inventory.can_afford(requester_id, "factory"):
+					print("Nie masz wystarczającej ilości surowców na fabrykę!")
+					return
+				cost = game_inventory.COSTS["factory"]
+				update_map_point.rpc(row, column, player_number, false) #zbuduj
+				
+			elif point.player_owner == player_number: #jak twoje to możesz ulepszyc:
+				if not game_inventory.can_afford(requester_id, "nuclear_power_plant"):
+					print("Nie masz wystarczającej ilości surowców na elektrownie!")
+					return
+				cost = game_inventory.COSTS["nuclear_power_plant"]
+				update_map_point.rpc(row, column, player_number, true) # true = ulepsz
+			
+			# OPŁATA ZA FABRYKĘ/ATOMICE
+			for res_type in cost:
+				var amount = cost[res_type]
+				game_inventory.take_resource(requester_id, res_type, amount)
+				
+			game_inventory.rpc("update_bank_inventory", game_inventory.inventory)
+			gui.update_player_resources()
 
 @rpc("any_peer", "call_local", "reliable")
 func request_place_road(road_name: String):
@@ -175,23 +193,41 @@ func request_place_road(road_name: String):
 		
 	var player_number = current_turn_index
 	
-	if requester_id == turn_order[current_turn_index]:
-		var road = $Map.get_node("roads").get_node_or_null(road_name)
+	if requester_id != turn_order[current_turn_index]:
 		
-		if road and road.player_owner == -1:
-			# Punkty końcowe drogi
-			var p1 = road.get_node(road.point_a_path)
-			var p2 = road.get_node(road.point_b_path)
+		return
+	
+	var road = $Map.get_node("roads").get_node_or_null(road_name)
+		
+	if road and road.player_owner == -1:
+		# Punkty końcowe drogi
+		var p1 = road.get_node(road.point_a_path)
+		var p2 = road.get_node(road.point_b_path)
 			
-			# SPRAWDZENIE Czy którykolwiek punkt należy do gracza
-			if p1.player_owner == player_number or p2.player_owner == player_number:
-				#sprawdzenie czy punkt przynależy do innego gracza.
-				if (p1.player_owner != -1 and p1.player_owner != player_number) or (p2.player_owner != -1 and p2.player_owner != player_number):
-					print("Nie możesz tu budować! Punkt przynależy do innego gracza")
-				else:
-					update_map_road.rpc(road_name, player_number)
-			else:
-				print("Nie możesz tu budować! Droga musi łączyć się z Twoim punktem/fabryką.")
+		# SPRAWDZENIE Czy którykolwiek punkt należy do gracza
+		if !(p1.player_owner == player_number or p2.player_owner == player_number):
+			print("Nie możesz tu budować! Droga musi łączyć się z Twoim punktem/fabryką.")
+			return
+		
+		#sprawdzenie czy punkt przynależy do innego gracza.
+		if (p1.player_owner != -1 and p1.player_owner != player_number) or (p2.player_owner != -1 and p2.player_owner != player_number):
+			print("Nie możesz tu budować! Punkt przynależy do innego gracza")
+			return
+
+		if not game_inventory.can_afford(requester_id, "road"):
+			print("Nie masz wystarczającej ilości surowców na drogę!")
+			return
+				
+		# OPŁATA ZA DROGĘ
+		var cost = game_inventory.COSTS["road"]
+		for res_type in cost:
+			var amount = cost[res_type]
+			game_inventory.take_resource(requester_id, res_type, amount)
+					
+		game_inventory.rpc("update_bank_inventory", game_inventory.inventory)
+		gui.update_player_resources()
+		update_map_road.rpc(road_name, player_number)
+
 
 #WSZYSCY (wykonują polecenie od hosta - aktualizacja planszy
 @rpc("any_peer", "call_local", "reliable")
