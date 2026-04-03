@@ -17,6 +17,10 @@ func can_afford(player_id: int, building_type: String) -> bool:
 	return true
 
 
+var players_list
+
+
+	
 func setup_deck():
 	for i in range(cards_in_deck):
 		#Wstawienie karty do decku
@@ -109,6 +113,9 @@ func get_player_resources(id: int):
 		push_error("Nie znaleziono surowców gracza od ID %d" % id)
 		return null
 
+func get_inventory():
+	return inventory
+
 @rpc("any_peer","call_local")
 func get_player_cards(id: int):
 	if inventory.has(id):
@@ -116,4 +123,19 @@ func get_player_cards(id: int):
 	else:
 		push_error("Nie znaleziono kart gracza od ID %d" % id)
 		return null
+		
+### Lista graczy ###	
 	
+# Ustawienie listy graczy host
+func setup_players_list(list):
+	players_list = list
+	rpc("sync_players_list", players_list)
+	
+# Ustawienie listy graczy inni
+@rpc("authority","call_local")
+func sync_players_list(list):
+	players_list = list
+	
+# Pobranie listy graczy
+func get_players_list():
+	return players_list
