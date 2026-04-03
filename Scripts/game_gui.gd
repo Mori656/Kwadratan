@@ -26,6 +26,9 @@ extends Control
 @onready var dice1 = $DiceContainer/DiceButton/Dice1Sprite
 @onready var dice2 = $DiceContainer/DiceButton/Dice2Sprite
 
+@onready var player_display = preload("res://Scenes/Prefabs/player_display.tscn")
+@onready var players_displays_container: HBoxContainer = $PlayersDisplays/PlayersDisplaysContainer
+
 var k1 = 0
 var k2 = 0
 var map_tiles = -1
@@ -49,6 +52,7 @@ func update_gui():
 	print("Uruchamiam update")
 	rpc("update_player_resources")
 	rpc("update_player_cards")
+	rpc("update_players_display")
 	
 @rpc("any_peer", "call_local")
 func update_player_resources():
@@ -81,6 +85,32 @@ func update_player_cards():
 	
 	_cards_placement()
 
+@rpc("any_peer", "call_local")
+func update_players_display():
+	var inventory_copy = inventory.get_inventory()
+	var players = inventory.get_players_list()
+	if !players:
+		print("Lista graczy nieznana")
+	else:
+		for child in players_displays_container.get_children():
+			players_displays_container.remove_child(child)
+			
+		for player_id in players:
+			if player_id != multiplayer.get_unique_id():
+				# nazwa gracza
+				var player_name = players[player_id] 
+				# ilość surowców
+				var resources_count = 0
+				for value in inventory_copy[player_id]["resources"].values():
+					resources_count += value
+				# ilość kart
+				var cards_count = inventory_copy[player_id]["cards"].size()
+				# Dodać wyświetlanie punktów tu!!!
+				# Punkty
+				# Przygotowanie displaya
+				var display = player_display.instantiate()
+				players_displays_container.add_child(display)
+				display.setup_value(player_name,resources_count,cards_count)
 func _on_card_used(card) -> void:
 	await inventory.on_card_used(card["id"])
 	selected_card = null

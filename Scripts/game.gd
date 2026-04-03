@@ -23,6 +23,7 @@ func _ready():
 		
 		#Przygotowanie kart w banku
 		game_inventory.setup_deck()
+		game_inventory.setup_players_list(CoopHandler.players_in_game)
 		
 		gui.update_gui()
 		
