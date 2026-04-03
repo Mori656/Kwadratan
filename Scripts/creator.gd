@@ -24,11 +24,11 @@ func _ready():
 			#pozycja i wartości dla kafelków
 			tile.position = Vector2(width * tilesize, tilesize * height)
 			tile.position += Vector2(screensize.x /2 - tile_count_w/2* tilesize, screensize.y /2 - tile_count_h/2* tilesize)
-			tile.row = width
-			tile.column = height
+			tile.column = width
+			tile.row = height
 			tile.value = 0  # narazie 0
 			tile.active = false
-			tile.name = "Tile" + "[" + str(tile.row) + "]" + "[" + str(tile.column) + "]"
+			tile.name = "Tile" + "[" + str(tile.column) + "]" + "[" + str(tile.row) + "]"
 			$tiles.add_child(tile)
 			tile.owner = self #do zapisu mapy
 			# Podpinamy sygnał i bindowanie tile jako argument (żeby później korzystać z jego funkcji) - Pierwsze kliknięcie
@@ -43,20 +43,20 @@ func _ready():
 				var point = map_point.instantiate()
 				point.position = Vector2(width * tilesize - (tilesize/2) , tilesize  * height - (tilesize/2)) 
 				point.position += Vector2(screensize.x /2 - tile_count_w/2*tilesize, screensize.y /2 - tile_count_h/2* tilesize)
-				point.row = width
-				point.column = height
+				point.column = width
+				point.row = height
 				
-				#ustalanie sąsiadów dla każdego punktu
-				var local_neighbors = []
+				#ustalanie sąsiadujących tile dla każdego punktu
+				var local_neighboring_tiles = []
 				for offset in offsets:
 					var nx = width + offset.x
 					var ny = height + offset.y
 					# Sprawdź czy sąsiad jest w granicach mapy 
 					if nx >= 0 and nx < tile_count_w and ny >= 0 and ny < tile_count_h:
-						local_neighbors.append(Vector2i(nx, ny))
+						local_neighboring_tiles.append(Vector2i(nx, ny))
 		
-				point.neighbors = local_neighbors
-				point.name = "Point" + "[" + str(point.row) + "]" + "[" + str(point.column) + "]"
+				point.neighboring_tiles = local_neighboring_tiles
+				point.name = "Point" + "[" + str(point.column) + "]" + "[" + str(point.row) + "]"
 				$points.add_child(point)
 				point.owner = self # do zapisu mapy
 	generate_roads()
@@ -71,7 +71,7 @@ func _process(delta):
 func _on_tile_clicked(_viewport, event, _shape_idx, tile): # _ żeby warningów nie było - to chyba weak declare
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT and !tile.active:
 		tile.toggle_active()
-		activate_points_with_neighbors(tile) #aktywuj pointy sąsiadujące z tym tile
+		activate_points_with_neighboring_tiles(tile) #aktywuj pointy sąsiadujące z tym tile
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 		if tile.active:
 			tile.toggle_active()
@@ -81,7 +81,7 @@ func _on_tile_clicked(_viewport, event, _shape_idx, tile): # _ żeby warningów 
 func _on_tile_mouse_entered(tile):
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		tile.set_active(true);
-		activate_points_with_neighbors(tile) #aktywuj pointy sąsiadujące z tym tile
+		activate_points_with_neighboring_tiles(tile) #aktywuj pointy sąsiadujące z tym tile
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 		tile.set_active(false);
 		deactivate_unused_points(tile) #deaktywuj pointy bez sąsiadów
@@ -128,20 +128,20 @@ func save_current_map(path: String):
 	else:
 		print("Błąd podczas pakowania sceny: ", result)
 		
-func activate_points_with_neighbors(tile):
+func activate_points_with_neighboring_tiles(tile):
 	for point in $points.get_children():
-			for neighbor in point.neighbors:
-				if neighbor.x == tile.row and neighbor.y == tile.column:
+			for neighbor in point.neighboring_tiles:
+				if neighbor.x == tile.column and neighbor.y == tile.row:
 					point.active = true
 					break  # ma sąsiada więc aktywny
 
 func deactivate_unused_points(tile):
 	for point in $points.get_children():
 		var still_has_active_neighbor = false
-		for neighbor in point.neighbors:
+		for neighbor in point.neighboring_tiles:
 			# Szukamy tile pasującego do neighbor
 			for other_tile in $tiles.get_children():
-					if other_tile.row == neighbor.x and other_tile.column == neighbor.y and other_tile.active:
+					if other_tile.column == neighbor.x and other_tile.row == neighbor.y and other_tile.active:
 						still_has_active_neighbor = true
 						break
 		if !still_has_active_neighbor:
@@ -164,21 +164,22 @@ func generate_roads():
 	for point in $points.get_children():
 		# 1. DROGA W PRAWO (Pozioma)
 		# Sprawdzamy, czy nie jesteśmy w ostatniej kolumnie punktów
-		if point.row < tile_count_w:
-			var right_point = get_point(point.row + 1, point.column)
+		if point.column < tile_count_w:
+			var right_point = get_point(point.column + 1, point.row)
 			if right_point:
 				create_road(point, right_point, false)
 		
 		# 2. DROGA W DÓŁ (Pionowa)
 		# Sprawdzamy, czy nie jesteśmy w ostatnim rzędzie punktów
-		if point.column < tile_count_h:
-			var bottom_point = get_point(point.row, point.column + 1)
+		if point.row < tile_count_h:
+			var bottom_point = get_point(point.column, point.row + 1)
 			if bottom_point:
 				create_road(point, bottom_point, true)
 
-func get_point(r: int, c: int):
+
+func get_point(c: int, r: int):
 	for p in $points.get_children():
-		if p.row == r and p.column == c:
+		if p.column == c and p.row == r:
 			return p
 	return null
 

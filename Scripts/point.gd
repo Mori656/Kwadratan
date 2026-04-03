@@ -1,10 +1,11 @@
 extends Node2D
 
-@export var neighbors: Array:
+@export var neighboring_tiles: Array:
 	set(value): #setter dla active
-		neighbors = value
+		neighboring_tiles = value
 
-var active: bool:
+#Ważne jeżeli point aktywny to znaczy że nie jest na morzu :) 
+@export var active: bool: 
 	set(value): #setter dla active
 		active = value
 		update_visual_state()

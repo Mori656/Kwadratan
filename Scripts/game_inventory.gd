@@ -1,8 +1,21 @@
 extends Node2D
 
 var inventory = {0:{"resources":{"wood":25, "iron":25, "oil":25, "coal":25, "uran":25},"cards":[]}}
+const COSTS = {
+	"factory": {"wood": 1, "iron": 1, "coal": 1},
+	"nuclear_power_plant": {"iron": 3, "uran": 3},
+	"road": {"wood": 1, "oil": 1}
+}
 var cards_in_deck = 10
 @onready var gui = $"../CanvasLayer/GUI"
+
+func can_afford(player_id: int, building_type: String) -> bool:
+	var cost = COSTS[building_type]
+	for res in cost:
+		if inventory[player_id]["resources"][res] < cost[res]:
+			return false
+	return true
+
 
 var players_list
 
@@ -15,7 +28,7 @@ func setup_deck():
 		inventory[0]["cards"].append(card)
 		
 func setup_player_inventory(id):
-	var player_inventory = {"resources":{"wood":0, "iron":0, "oil":0, "coal":0, "uran":0},"cards":[]}
+	var player_inventory = {"resources":{"wood":10, "iron":10, "oil":10, "coal":10, "uran":10},"cards":[]}
 	inventory[id] = player_inventory
 	rpc("update_bank_inventory",inventory)
 
@@ -31,18 +44,23 @@ func on_card_used(id):
 func on_card_used_add_resource(res):
 	rpc_id(1,"give_resource_to_players_by_card",res,multiplayer.get_unique_id())
 	
-@rpc("any_peer","call_local")
-func give_resource_to_players_by_dice(res,requester):
-	print("Przydzialanie surowców")
-	for player in inventory:
-		print("(Przed) Gracz", player, " ma ", inventory[player])
-	if take_resource(0, res, 1): # zabieramy 1 surowiec z banku
-		give_resource(requester,res,1)
-		print("Gracz ", requester, " otrzymał ", res) ## print kto co dostał
+@rpc("any_peer", "call_local")
+func give_resource_to_players_by_dice(res: String, requester: int, amount: int): # Dodano parametr amount
+	if not multiplayer.is_server(): 
+		return
+	print("--- Przydzielanie surowców ---")
+	# Sprawdzamy dostępność w banku (ID 0)
+	var available_in_bank = inventory[0]["resources"][res]
+	var final_amount = min(amount, available_in_bank) 	# dajemy maksymalną ilość jaką się da
+	
+	if final_amount > 0:
+		if take_resource(0, res, final_amount): # zabieramy z banku
+			give_resource(requester, res, final_amount) # dajemy graczowi (peer_id)
+			print("Gracz ", requester, " otrzymał ", final_amount, "x ", res)
 	else:
-		print("Bank nie ma wystarczającej ilości zasobu: ", res)
-	for player in inventory:
-		print("Gracz", player, " ma ", inventory[player])
+		print("Bank nie ma surowca: ", res)
+
+	# Synchronizacja całości
 	rpc("update_bank_inventory", inventory)
 	gui.update_gui()
 	
