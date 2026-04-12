@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=3 uid="uid://b1tl4xf0ab5wa"]
 
-[ext_resource type="Script" uid="uid://k22crl0iid08" path="res://Scripts/map.gd" id="1_gvxw8"]
+[ext_resource type="Script" uid="uid://k22crl0iid08" path="res://Scripts/Maps/map.gd" id="1_gvxw8"]
 [ext_resource type="PackedScene" uid="uid://cayg0x1jfojf6" path="res://Scenes/Prefabs/tile.tscn" id="2_rpjf5"]
 [ext_resource type="PackedScene" uid="uid://1cy5m1ykp5dn" path="res://Scenes/Prefabs/point.tscn" id="4_ovyqb"]
 [ext_resource type="PackedScene" uid="uid://bg3vpno5mg2o4" path="res://Scenes/Prefabs/road.tscn" id="6_pk84n"]
-[ext_resource type="Script" uid="uid://ceygssjee58j1" path="res://Scripts/camera_movement.gd" id="8_6ooih"]
+[ext_resource type="Script" uid="uid://ceygssjee58j1" path="res://Scripts/Game/camera_movement.gd" id="8_6ooih"]
 
 [node name="Main" type="Node2D" groups=["points"]]
 script = ExtResource("1_gvxw8")

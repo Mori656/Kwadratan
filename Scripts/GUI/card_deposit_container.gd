@@ -1,6 +1,6 @@
 extends Area2D
 
-@onready var inventory = $"../../../GameInventory"
+@onready var cards_deck = $"../../../CardsDeck"
 
 func on_card_dropped(card:CardNode):
 	var callable = Callable(self, card["fun"])
@@ -12,4 +12,4 @@ func on_card_dropped(card:CardNode):
 	pass
 	
 func add_wood():
-	inventory.on_card_used_add_resource("wood")
+	cards_deck.on_card_used_add_resource("wood")

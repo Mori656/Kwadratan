@@ -107,7 +107,7 @@ func save_current_map(path: String):
 	# Odłączamy node do eksportu
 	remove_child(GUI)
 	# Zmiana skryptu dla wyeksportowanej mapy
-	var runtime_script = load("res://Scripts/map.gd")
+	var runtime_script = load("res://Scripts/Maps/map.gd")
 	set_script(runtime_script)
 	#eksport do zmiennych
 	var new_scene = PackedScene.new()
@@ -117,7 +117,7 @@ func save_current_map(path: String):
 	call_deferred("generate_map_thumbnail", image_path)
 	
 	# Przywracamy domyślne ustawienia
-	set_script(preload("res://Scripts/creator.gd"))
+	set_script(preload("res://Scripts/Maps/creator.gd"))
 
 	if result == OK:
 		var error = ResourceSaver.save(new_scene, map_path)

@@ -17,7 +17,7 @@ config/icon="res://Assets/icon.svg"
 
 [autoload]
 
-CoopHandler="*res://Scripts/coop_handler.gd"
+CoopHandler="*res://Scripts/Coop/coop_handler.gd"
 
 [display]
 
