@@ -1,10 +1,12 @@
-[gd_scene load_steps=8 format=3 uid="uid://c14xj5cuf1xce"]
+[gd_scene load_steps=10 format=3 uid="uid://c14xj5cuf1xce"]
 
-[ext_resource type="Script" uid="uid://dbfp7tw6eyadc" path="res://Scripts/game_gui.gd" id="1_lw6sg"]
+[ext_resource type="Script" uid="uid://dbfp7tw6eyadc" path="res://Scripts/GUI/game_gui.gd" id="1_lw6sg"]
+[ext_resource type="Script" uid="uid://dt57o6bo2w4yu" path="res://Scripts/GUI/players_displays.gd" id="2_e6vo3"]
 [ext_resource type="SpriteFrames" uid="uid://c57xudkpyk0gf" path="res://Assets/Styles/dice_state.tres" id="2_fn00h"]
 [ext_resource type="Theme" uid="uid://b00ihv7vo20ls" path="res://Assets/Styles/Gui.tres" id="2_to364"]
 [ext_resource type="Texture2D" uid="uid://bcpwa6ovbtef1" path="res://Assets/kwadratan-tileset.png" id="3_fn00h"]
-[ext_resource type="Script" uid="uid://cvincv7mrhj3w" path="res://Scenes/card_deposit_container.gd" id="5_byx0o"]
+[ext_resource type="Script" uid="uid://cvincv7mrhj3w" path="res://Scripts/GUI/card_deposit_container.gd" id="5_byx0o"]
+[ext_resource type="Script" uid="uid://bjr24nbeig7bj" path="res://Scripts/GUI/cards_container.gd" id="5_e1glk"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_lw6sg"]
 
@@ -26,6 +28,7 @@ layout_mode = 2
 anchors_preset = 0
 offset_right = 544.0
 offset_bottom = 128.0
+script = ExtResource("2_e6vo3")
 
 [node name="PlayersDisplaysContainer" type="HBoxContainer" parent="PlayersDisplays"]
 layout_mode = 0
@@ -270,8 +273,16 @@ text = "00"
 
 [node name="CardsContainer" type="Control" parent="."]
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 24.0
+offset_bottom = 24.0
+script = ExtResource("5_e1glk")
+
+[node name="CardDepositContainer" type="Area2D" parent="."]
+script = ExtResource("5_byx0o")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CardDepositContainer"]
+position = Vector2(259.5, 139.5)
+shape = SubResource("RectangleShape2D_fn00h")
 
 [node name="DrawCardButton" type="Button" parent="."]
 layout_mode = 0
@@ -281,13 +292,6 @@ offset_right = 634.0
 offset_bottom = 319.0
 text = "Draw
 "
-
-[node name="CardDepositContainer" type="Area2D" parent="."]
-script = ExtResource("5_byx0o")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CardDepositContainer"]
-position = Vector2(259.5, 139.5)
-shape = SubResource("RectangleShape2D_fn00h")
 
 [connection signal="pressed" from="DiceContainer/DiceButton" to="." method="_on_dice_button_pressed"]
 [connection signal="toggled" from="BankResourceContainer/BankButton" to="." method="_on_bank_button_toggled"]

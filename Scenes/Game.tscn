@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://bgfppx4gvex5"]
+[gd_scene load_steps=7 format=3 uid="uid://bgfppx4gvex5"]
 
-[ext_resource type="Script" uid="uid://dwasi7octr36h" path="res://Scripts/game.gd" id="1_iukft"]
+[ext_resource type="Script" uid="uid://dwasi7octr36h" path="res://Scripts/Game/game.gd" id="1_iukft"]
 [ext_resource type="PackedScene" uid="uid://c14xj5cuf1xce" path="res://Scenes/GameGUI.tscn" id="2_gl6un"]
-[ext_resource type="Script" uid="uid://lojug5jaedq7" path="res://Scripts/game_inventory.gd" id="6_2irst"]
+[ext_resource type="Script" uid="uid://xachsvtcj4ir" path="res://Scripts/Game/player_list.gd" id="4_kldst"]
+[ext_resource type="Script" uid="uid://q7oc0mk1exdb" path="res://Scenes/cards_deck.gd" id="5_b2bpf"]
+[ext_resource type="Script" uid="uid://lojug5jaedq7" path="res://Scripts/Game/game_inventory.gd" id="6_2irst"]
+[ext_resource type="Script" uid="uid://dce1n2k8gl6lx" path="res://Scenes/dice.gd" id="6_7lihs"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_iukft")
@@ -14,3 +17,12 @@ script = ExtResource("6_2irst")
 
 [node name="GUI" parent="CanvasLayer" instance=ExtResource("2_gl6un")]
 z_index = 100
+
+[node name="PlayerList" type="Node2D" parent="."]
+script = ExtResource("4_kldst")
+
+[node name="CardsDeck" type="Node2D" parent="."]
+script = ExtResource("5_b2bpf")
+
+[node name="Dice" type="Node2D" parent="."]
+script = ExtResource("6_7lihs")

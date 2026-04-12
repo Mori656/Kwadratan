@@ -4,10 +4,11 @@ extends Node2D
 @onready var dice_button = $CanvasLayer/GUI/DiceContainer/DiceButton
 @onready var gui = $CanvasLayer/GUI
 @onready var game_inventory = $GameInventory
+@onready var player_list: Node2D = $PlayerList
+@onready var cards_deck: Node2D = $CardsDeck
 
 var turn_order: Array = [] #na podstawie listy graczy
 var current_turn_index := 0
-
 
 func _ready():
 	dice_button.pressed.connect(_on_dicebutton_pressed) 
@@ -20,11 +21,15 @@ func _ready():
 		for player_id in CoopHandler.players_in_game:
 			print(player_id)
 			game_inventory.setup_player_inventory(player_id)
-		
+			
+
+		#Przygotowanie listy graczy
+		player_list.setup_players_list(CoopHandler.players_in_game)	
 		#Przygotowanie kart w banku
-		game_inventory.setup_deck()
-		game_inventory.setup_players_list(CoopHandler.players_in_game)
+		cards_deck.setup_deck()
 		
+		### GUI
+		#Update danych w GUI
 		gui.update_gui()
 		
 		# Serwer ustala kolejność tury

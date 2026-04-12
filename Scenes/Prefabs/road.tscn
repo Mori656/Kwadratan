@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://bg3vpno5mg2o4"]
 
-[ext_resource type="Script" uid="uid://bcjqgi2pvn4pj" path="res://Scripts/road.gd" id="1_dtk37"]
+[ext_resource type="Script" uid="uid://bcjqgi2pvn4pj" path="res://Scripts/Prefabs/road.gd" id="1_dtk37"]
 [ext_resource type="Texture2D" uid="uid://bcpwa6ovbtef1" path="res://Assets/kwadratan-tileset.png" id="3_ojag1"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rk3mb"]
