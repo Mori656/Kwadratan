@@ -33,7 +33,8 @@ func update_inventory(new_inventory: Dictionary = inventory):
 @rpc("any_peer","call_local")
 func update_bank_inventory(new_inventory: Dictionary):
 	inventory = new_inventory
-	
+	gui.update_player_resources()#update gui po zmianach
+
 func take_resource(id: int, res: String, count: int) -> bool:
 	if inventory[id]["resources"][res] >= count:
 		inventory[id]["resources"][res] -= count
@@ -51,7 +52,7 @@ func get_player_resources(id: int):
 		return inventory[id]["resources"]
 	else:
 		push_error("Nie znaleziono surowców gracza od ID %d" % id)
-		return null
+		return {"wood": 0, "iron": 0, "oil": 0, "coal": 0, "uran": 0} #zapobiegam błędowi inicjalizacji :/ 
 
 func get_inventory():
 	return inventory
