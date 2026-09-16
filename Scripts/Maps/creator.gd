@@ -201,5 +201,3 @@ func create_road(p1, p2, vertical: bool):
 		road.rotation_degrees = 0
 	else:
 		road.rotation_degrees = 90
-		
-	

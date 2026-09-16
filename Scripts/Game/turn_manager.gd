@@ -21,6 +21,11 @@ func request_end_turn():
 	if multiplayer.is_server():
 		end_turn()
 
+@rpc("any_peer", "call_local", "reliable")
+func sync_turn_order(order: Array):
+	turn_order = order
+	print("Zsynchronizowano kolejność tur dla gracza ", multiplayer.get_unique_id(), ": ", turn_order)
+
 func end_turn():
 	current_turn_index += 1
 	if current_turn_index >= turn_order.size():
@@ -28,3 +33,4 @@ func end_turn():
 
 	var next_peer_id = turn_order[current_turn_index]
 	update_turn.rpc(next_peer_id)
+	
