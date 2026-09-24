@@ -3,12 +3,13 @@
 [ext_resource type="Script" uid="uid://dwasi7octr36h" path="res://Scripts/Game/game.gd" id="1_iukft"]
 [ext_resource type="PackedScene" uid="uid://c14xj5cuf1xce" path="res://Scenes/GameGUI.tscn" id="2_gl6un"]
 [ext_resource type="Script" uid="uid://xachsvtcj4ir" path="res://Scripts/Game/player_list.gd" id="4_kldst"]
-[ext_resource type="Script" uid="uid://q7oc0mk1exdb" path="res://Scenes/cards_deck.gd" id="5_b2bpf"]
+[ext_resource type="Script" uid="uid://q7oc0mk1exdb" path="res://Scripts/Game/cards_deck.gd" id="5_b2bpf"]
 [ext_resource type="Script" uid="uid://lojug5jaedq7" path="res://Scripts/Game/game_inventory.gd" id="6_2irst"]
-[ext_resource type="Script" uid="uid://dce1n2k8gl6lx" path="res://Scenes/dice.gd" id="6_7lihs"]
 [ext_resource type="Script" uid="uid://cou3nxxncnupn" path="res://Scripts/Game/turn_manager.gd" id="6_fgofq"]
 [ext_resource type="Script" uid="uid://bbd5smi8mtw25" path="res://Scripts/Game/build_manager.gd" id="7_2irst"]
 [ext_resource type="Script" uid="uid://bj8fiqun5o2nb" path="res://Scripts/Game/dialog_manager.gd" id="8_bf53h"]
+[ext_resource type="Script" uid="uid://dce1n2k8gl6lx" path="res://Scripts/Game/dice.gd" id="6_7lihs"]
+[ext_resource type="Script" uid="uid://cp5cxdvwdelap" path="res://Scripts/Game/trade_manager.gd" id="7_fgofq"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_iukft")
@@ -38,3 +39,6 @@ script = ExtResource("8_bf53h")
 
 [node name="Dice" type="Node2D" parent="."]
 script = ExtResource("6_7lihs")
+
+[node name="Trade" type="Node2D" parent="."]
+script = ExtResource("7_fgofq")
