@@ -1,0 +1,95 @@
+[gd_scene load_steps=8 format=3 uid="uid://g2wtthrkhrw5"]
+
+[ext_resource type="Script" uid="uid://d137rhqe6na8e" path="res://Scripts/Prefabs/trade_offer.gd" id="1_ltfmp"]
+[ext_resource type="Texture2D" uid="uid://bcpwa6ovbtef1" path="res://Assets/kwadratan-tileset.png" id="2_eex80"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_eex80"]
+texture = ExtResource("2_eex80")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+region_rect = Rect2(208, 0, 48, 48)
+
+[sub_resource type="LabelSettings" id="LabelSettings_xmcsd"]
+font_size = 8
+
+[sub_resource type="LabelSettings" id="LabelSettings_ltfmp"]
+font_size = 8
+
+[sub_resource type="LabelSettings" id="LabelSettings_eex80"]
+font_size = 6
+
+[sub_resource type="LabelSettings" id="LabelSettings_k8s5q"]
+font_size = 6
+
+[node name="TradeOffer" type="Node2D"]
+script = ExtResource("1_ltfmp")
+
+[node name="OfferBox" type="PanelContainer" parent="."]
+offset_right = 140.0
+offset_bottom = 58.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_eex80")
+
+[node name="OfferBoxcontent" type="Control" parent="OfferBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="OfferBox/OfferBoxcontent"]
+layout_mode = 2
+offset_left = -2.0
+offset_top = -3.0
+offset_right = 118.0
+offset_bottom = 9.0
+text = "Do you wanna trade?"
+label_settings = SubResource("LabelSettings_xmcsd")
+horizontal_alignment = 1
+
+[node name="OfferInfo" type="HBoxContainer" parent="OfferBox/OfferBoxcontent"]
+layout_mode = 2
+offset_top = 9.0
+offset_right = 120.0
+offset_bottom = 29.0
+alignment = 1
+
+[node name="OfferedResources" type="HBoxContainer" parent="OfferBox/OfferBoxcontent/OfferInfo"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="OfferSeparator" type="Label" parent="OfferBox/OfferBoxcontent/OfferInfo"]
+layout_mode = 2
+text = "->"
+label_settings = SubResource("LabelSettings_ltfmp")
+
+[node name="WantedResources" type="HBoxContainer" parent="OfferBox/OfferBoxcontent/OfferInfo"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="DeclineTradeButton" type="Button" parent="OfferBox/OfferBoxcontent"]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 32.0
+offset_right = 53.0
+offset_bottom = 42.0
+
+[node name="Label" type="Label" parent="OfferBox/OfferBoxcontent/DeclineTradeButton"]
+layout_mode = 0
+offset_right = 50.0
+offset_bottom = 9.0
+text = "Decline"
+label_settings = SubResource("LabelSettings_eex80")
+horizontal_alignment = 1
+
+[node name="AcceptTradeButton" type="Button" parent="OfferBox/OfferBoxcontent"]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 32.0
+offset_right = 114.0
+offset_bottom = 42.0
+
+[node name="Label" type="Label" parent="OfferBox/OfferBoxcontent/AcceptTradeButton"]
+layout_mode = 0
+offset_right = 50.0
+offset_bottom = 10.0
+text = "Accept"
+label_settings = SubResource("LabelSettings_k8s5q")
+horizontal_alignment = 1

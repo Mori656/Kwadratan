@@ -2,7 +2,7 @@ extends Node2D
 
 @onready var gui = $"../CanvasLayer/GUI"
 
-var inventory = {0:{"resources":{"wood":25, "iron":25, "oil":25, "coal":25, "uran":25},"cards":[]}}
+var inventory = {0:{"resources":{"wood":25, "iron":25, "oil":25, "coal":25, "uran":25},"cards":[]},"trades_values":[]}
 
 var cards_in_deck = 10
 
@@ -23,7 +23,7 @@ func can_afford(player_id: int, building_type: String) -> bool:
 ### Inventory ###
 		
 func setup_player_inventory(id):
-	var player_inventory = {"resources":{"wood":10, "iron":10, "oil":10, "coal":10, "uran":10},"cards":[]}
+	var player_inventory = {"resources":{"wood":10, "iron":10, "oil":10, "coal":10, "uran":10},"cards":[],"trades_values":{"wood":4, "iron":4, "oil":4, "coal":4, "uran":4}}
 	inventory[id] = player_inventory
 	rpc("update_bank_inventory",inventory)
 
@@ -39,7 +39,7 @@ func take_resource(id: int, res: String, count: int) -> bool:
 		inventory[id]["resources"][res] -= count
 		return true
 	else:
-		print("nie ma wystarczającej liczby surowca w banku")
+		print("nie ma wystarczającej liczby surowca w ekwipunku", id)
 	return false
 	
 func give_resource(id: int, res: String, count: int):
@@ -51,6 +51,13 @@ func get_player_resources(id: int):
 		return inventory[id]["resources"]
 	else:
 		push_error("Nie znaleziono surowców gracza od ID %d" % id)
+		return null
+
+func get_player_trades_values(id: int):
+	if inventory.has(id):
+		return inventory[id]["trades_values"]
+	else:
+		push_error("Nie znaleziono wartości tradeów od ID %d" % id)
 		return null
 
 func get_inventory():

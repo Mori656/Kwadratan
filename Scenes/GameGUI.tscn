@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://c14xj5cuf1xce"]
+[gd_scene load_steps=15 format=3 uid="uid://c14xj5cuf1xce"]
 
 [ext_resource type="Script" uid="uid://dbfp7tw6eyadc" path="res://Scripts/GUI/game_gui.gd" id="1_lw6sg"]
 [ext_resource type="Script" uid="uid://dt57o6bo2w4yu" path="res://Scripts/GUI/players_displays.gd" id="2_e6vo3"]
@@ -7,11 +7,24 @@
 [ext_resource type="Texture2D" uid="uid://bcpwa6ovbtef1" path="res://Assets/kwadratan-tileset.png" id="3_fn00h"]
 [ext_resource type="Script" uid="uid://cvincv7mrhj3w" path="res://Scripts/GUI/card_deposit_container.gd" id="5_byx0o"]
 [ext_resource type="Script" uid="uid://bjr24nbeig7bj" path="res://Scripts/GUI/cards_container.gd" id="5_e1glk"]
+[ext_resource type="Script" uid="uid://bbpvqocwyg1w2" path="res://Scripts/GUI/trade_container.gd" id="8_t6nqq"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_lw6sg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fn00h"]
 size = Vector2(441, 249)
+
+[sub_resource type="LabelSettings" id="LabelSettings_t6nqq"]
+font_size = 9
+
+[sub_resource type="LabelSettings" id="LabelSettings_0lufs"]
+font_size = 9
+
+[sub_resource type="Theme" id="Theme_0lufs"]
+default_font_size = 1
+
+[sub_resource type="LabelSettings" id="LabelSettings_tuocr"]
+font_size = 10
 
 [node name="GUI" type="Control"]
 layout_mode = 3
@@ -168,6 +181,7 @@ vertical_alignment = 1
 replication_config = SubResource("SceneReplicationConfig_lw6sg")
 
 [node name="Players" type="PanelContainer" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 549.0
 offset_right = 675.0
@@ -281,7 +295,7 @@ script = ExtResource("5_e1glk")
 script = ExtResource("5_byx0o")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CardDepositContainer"]
-position = Vector2(259.5, 139.5)
+position = Vector2(320, 136)
 shape = SubResource("RectangleShape2D_fn00h")
 
 [node name="DrawCardButton" type="Button" parent="."]
@@ -293,7 +307,468 @@ offset_bottom = 319.0
 text = "Draw
 "
 
+[node name="TradeContainer" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 530.0
+offset_top = 64.0
+offset_right = 642.0
+offset_bottom = 128.0
+script = ExtResource("8_t6nqq")
+
+[node name="TradeButton" type="Button" parent="TradeContainer"]
+layout_mode = 0
+offset_left = -27.0
+offset_top = 36.0
+offset_right = 28.0
+offset_bottom = 76.0
+scale = Vector2(0.5, 0.5)
+toggle_mode = true
+button_pressed = true
+text = "Trade
+"
+
+[node name="TradeWithPeopleButton" type="Button" parent="TradeContainer"]
+layout_mode = 0
+offset_left = -11.0
+offset_top = 7.0
+offset_bottom = 18.0
+
+[node name="Label" type="Label" parent="TradeContainer/TradeWithPeopleButton"]
+layout_mode = 0
+offset_left = 3.0
+offset_top = -2.0
+offset_right = 13.0
+offset_bottom = 11.0
+text = "P"
+label_settings = SubResource("LabelSettings_t6nqq")
+
+[node name="TradeWithBankButton" type="Button" parent="TradeContainer"]
+layout_mode = 0
+offset_left = -11.0
+offset_top = 19.0
+offset_bottom = 30.0
+
+[node name="Label" type="Label" parent="TradeContainer/TradeWithBankButton"]
+layout_mode = 0
+offset_left = 3.0
+offset_top = -2.0
+offset_right = 14.0
+offset_bottom = 11.0
+text = "B"
+label_settings = SubResource("LabelSettings_0lufs")
+
+[node name="Panel" type="Panel" parent="TradeContainer"]
+layout_mode = 0
+offset_top = -2.0
+offset_right = 220.0
+offset_bottom = 134.0
+scale = Vector2(0.5, 0.5)
+theme = ExtResource("2_to364")
+
+[node name="ResetTradeButton" type="Button" parent="TradeContainer/Panel"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 106.0
+offset_right = 104.0
+offset_bottom = 126.0
+
+[node name="Label" type="Label" parent="TradeContainer/Panel/ResetTradeButton"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = -2.0
+offset_right = 60.0
+offset_bottom = 21.0
+text = "Reset
+"
+
+[node name="MakeOfferButton" type="Button" parent="TradeContainer/Panel"]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 106.0
+offset_right = 200.0
+offset_bottom = 126.0
+
+[node name="Label" type="Label" parent="TradeContainer/Panel/MakeOfferButton"]
+layout_mode = 0
+offset_left = 14.0
+offset_top = -2.0
+offset_right = 67.0
+offset_bottom = 21.0
+text = "Trade"
+
+[node name="ResourceContainer" type="Control" parent="TradeContainer/Panel"]
+anchors_preset = 0
+offset_left = 2.0
+offset_top = 48.0
+offset_right = 222.0
+offset_bottom = 90.0
+
+[node name="WoodImage" type="Sprite2D" parent="TradeContainer/Panel/ResourceContainer"]
+position = Vector2(30, 6.8)
+texture = ExtResource("3_fn00h")
+region_enabled = true
+region_rect = Rect2(0, 161, 32, 16)
+
+[node name="IronImage" type="Sprite2D" parent="TradeContainer/Panel/ResourceContainer"]
+position = Vector2(70, 4.8)
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("3_fn00h")
+region_enabled = true
+region_rect = Rect2(32, 161, 32, 16)
+
+[node name="OilImage" type="Sprite2D" parent="TradeContainer/Panel/ResourceContainer"]
+position = Vector2(110, 5.8)
+texture = ExtResource("3_fn00h")
+region_enabled = true
+region_rect = Rect2(64, 161, 32, 16)
+
+[node name="CoalImage" type="Sprite2D" parent="TradeContainer/Panel/ResourceContainer"]
+position = Vector2(150, 5.8)
+texture = ExtResource("3_fn00h")
+region_enabled = true
+region_rect = Rect2(96, 161, 32, 16)
+
+[node name="UranImage" type="Sprite2D" parent="TradeContainer/Panel/ResourceContainer"]
+position = Vector2(190, 6.8)
+texture = ExtResource("3_fn00h")
+region_enabled = true
+region_rect = Rect2(128, 161, 32, 16)
+
+[node name="AddResouceContainer" type="Control" parent="TradeContainer/Panel"]
+anchors_preset = 0
+offset_top = 18.0
+offset_right = 222.0
+offset_bottom = 44.0
+
+[node name="AddWood" type="Button" parent="TradeContainer/Panel/AddResouceContainer"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 10.0
+offset_right = 40.0
+offset_bottom = 26.0
+theme = SubResource("Theme_0lufs")
+text = "
+"
+
+[node name="AddWoodValue" type="Label" parent="TradeContainer/Panel/AddResouceContainer/AddWood"]
+layout_mode = 0
+offset_left = -4.0
+offset_right = 20.0
+offset_bottom = 31.0
+text = "+1
+"
+label_settings = SubResource("LabelSettings_tuocr")
+horizontal_alignment = 1
+
+[node name="AddIron" type="Button" parent="TradeContainer/Panel/AddResouceContainer"]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 10.0
+offset_right = 80.0
+offset_bottom = 26.0
+theme = SubResource("Theme_0lufs")
+text = "
+"
+
+[node name="AddIronValue" type="Label" parent="TradeContainer/Panel/AddResouceContainer/AddIron"]
+layout_mode = 0
+offset_left = -4.0
+offset_right = 20.0
+offset_bottom = 31.0
+text = "+1
+"
+label_settings = SubResource("LabelSettings_tuocr")
+horizontal_alignment = 1
+
+[node name="AddOil" type="Button" parent="TradeContainer/Panel/AddResouceContainer"]
+layout_mode = 0
+offset_left = 104.0
+offset_top = 10.0
+offset_right = 120.0
+offset_bottom = 26.0
+theme = SubResource("Theme_0lufs")
+text = "
+"
+
+[node name="AddOilValue" type="Label" parent="TradeContainer/Panel/AddResouceContainer/AddOil"]
+layout_mode = 0
+offset_left = -4.0
+offset_right = 20.0
+offset_bottom = 31.0
+text = "+1
+"
+label_settings = SubResource("LabelSettings_tuocr")
+horizontal_alignment = 1
+
+[node name="AddCoal" type="Button" parent="TradeContainer/Panel/AddResouceContainer"]
+layout_mode = 0
+offset_left = 144.0
+offset_top = 10.0
+offset_right = 160.0
+offset_bottom = 26.0
+theme = SubResource("Theme_0lufs")
+text = "
+"
+
+[node name="AddCoalValue" type="Label" parent="TradeContainer/Panel/AddResouceContainer/AddCoal"]
+layout_mode = 0
+offset_left = -4.0
+offset_right = 20.0
+offset_bottom = 31.0
+text = "+1
+"
+label_settings = SubResource("LabelSettings_tuocr")
+horizontal_alignment = 1
+
+[node name="AddUran" type="Button" parent="TradeContainer/Panel/AddResouceContainer"]
+layout_mode = 0
+offset_left = 184.0
+offset_top = 10.0
+offset_right = 200.0
+offset_bottom = 26.0
+theme = SubResource("Theme_0lufs")
+text = "
+"
+
+[node name="AddUranValue" type="Label" parent="TradeContainer/Panel/AddResouceContainer/AddUran"]
+layout_mode = 0
+offset_left = -4.0
+offset_right = 20.0
+offset_bottom = 31.0
+text = "+1
+"
+label_settings = SubResource("LabelSettings_tuocr")
+horizontal_alignment = 1
+
+[node name="WoodCountAdd" type="Label" parent="TradeContainer/Panel/AddResouceContainer"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = -16.0
+offset_right = 48.0
+offset_bottom = 14.0
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="IronCountAdd" type="Label" parent="TradeContainer/Panel/AddResouceContainer"]
+layout_mode = 0
+offset_left = 56.0
+offset_top = -16.0
+offset_right = 88.0
+offset_bottom = 14.0
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OilCountAdd" type="Label" parent="TradeContainer/Panel/AddResouceContainer"]
+layout_mode = 0
+offset_left = 96.0
+offset_top = -16.0
+offset_right = 128.0
+offset_bottom = 14.0
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CoalCountAdd" type="Label" parent="TradeContainer/Panel/AddResouceContainer"]
+layout_mode = 0
+offset_left = 136.0
+offset_top = -16.0
+offset_right = 168.0
+offset_bottom = 14.0
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="UranCountAdd" type="Label" parent="TradeContainer/Panel/AddResouceContainer"]
+layout_mode = 0
+offset_left = 176.0
+offset_top = -16.0
+offset_right = 208.0
+offset_bottom = 14.0
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RemoveResouceContainer" type="Control" parent="TradeContainer/Panel"]
+layout_mode = 3
+anchors_preset = 0
+offset_top = 56.0
+offset_right = 222.0
+offset_bottom = 82.0
+
+[node name="RemoveWood" type="Button" parent="TradeContainer/Panel/RemoveResouceContainer"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 10.0
+offset_right = 40.0
+offset_bottom = 26.0
+theme = SubResource("Theme_0lufs")
+text = "
+"
+
+[node name="RemoveWoodValue" type="Label" parent="TradeContainer/Panel/RemoveResouceContainer/RemoveWood"]
+layout_mode = 0
+offset_left = -4.0
+offset_right = 20.0
+offset_bottom = 31.0
+text = "-1
+"
+label_settings = SubResource("LabelSettings_tuocr")
+horizontal_alignment = 1
+
+[node name="RemoveIron" type="Button" parent="TradeContainer/Panel/RemoveResouceContainer"]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 10.0
+offset_right = 80.0
+offset_bottom = 26.0
+theme = SubResource("Theme_0lufs")
+text = "
+"
+
+[node name="RemoveIronValue" type="Label" parent="TradeContainer/Panel/RemoveResouceContainer/RemoveIron"]
+layout_mode = 0
+offset_left = -4.0
+offset_right = 20.0
+offset_bottom = 31.0
+text = "-1
+"
+label_settings = SubResource("LabelSettings_tuocr")
+horizontal_alignment = 1
+
+[node name="RemoveOil" type="Button" parent="TradeContainer/Panel/RemoveResouceContainer"]
+layout_mode = 0
+offset_left = 104.0
+offset_top = 10.0
+offset_right = 120.0
+offset_bottom = 26.0
+theme = SubResource("Theme_0lufs")
+text = "
+"
+
+[node name="RemoveOilValue" type="Label" parent="TradeContainer/Panel/RemoveResouceContainer/RemoveOil"]
+layout_mode = 0
+offset_left = -4.0
+offset_right = 20.0
+offset_bottom = 31.0
+text = "-1
+"
+label_settings = SubResource("LabelSettings_tuocr")
+horizontal_alignment = 1
+
+[node name="RemoveCoal" type="Button" parent="TradeContainer/Panel/RemoveResouceContainer"]
+layout_mode = 0
+offset_left = 144.0
+offset_top = 10.0
+offset_right = 160.0
+offset_bottom = 26.0
+theme = SubResource("Theme_0lufs")
+text = "
+"
+
+[node name="RemoveCoalValue" type="Label" parent="TradeContainer/Panel/RemoveResouceContainer/RemoveCoal"]
+layout_mode = 0
+offset_left = -4.0
+offset_right = 20.0
+offset_bottom = 31.0
+text = "-1
+"
+label_settings = SubResource("LabelSettings_tuocr")
+horizontal_alignment = 1
+
+[node name="RemoveUran" type="Button" parent="TradeContainer/Panel/RemoveResouceContainer"]
+layout_mode = 0
+offset_left = 184.0
+offset_top = 10.0
+offset_right = 200.0
+offset_bottom = 26.0
+theme = SubResource("Theme_0lufs")
+text = "
+"
+
+[node name="RemoveUranValue" type="Label" parent="TradeContainer/Panel/RemoveResouceContainer/RemoveUran"]
+layout_mode = 0
+offset_left = -4.0
+offset_right = 20.0
+offset_bottom = 31.0
+text = "-1
+"
+label_settings = SubResource("LabelSettings_tuocr")
+horizontal_alignment = 1
+
+[node name="WoodCountRemove" type="Label" parent="TradeContainer/Panel/RemoveResouceContainer"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 20.0
+offset_right = 48.0
+offset_bottom = 50.0
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="IronCountRemove" type="Label" parent="TradeContainer/Panel/RemoveResouceContainer"]
+layout_mode = 0
+offset_left = 56.0
+offset_top = 20.0
+offset_right = 88.0
+offset_bottom = 50.0
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OilCountRemove" type="Label" parent="TradeContainer/Panel/RemoveResouceContainer"]
+layout_mode = 0
+offset_left = 96.0
+offset_top = 20.0
+offset_right = 128.0
+offset_bottom = 50.0
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CoalCountRemove" type="Label" parent="TradeContainer/Panel/RemoveResouceContainer"]
+layout_mode = 0
+offset_left = 136.0
+offset_top = 20.0
+offset_right = 168.0
+offset_bottom = 50.0
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="UranCountRemove" type="Label" parent="TradeContainer/Panel/RemoveResouceContainer"]
+layout_mode = 0
+offset_left = 176.0
+offset_top = 20.0
+offset_right = 208.0
+offset_bottom = 50.0
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OfferContainer" type="Control" parent="."]
+anchors_preset = 0
+offset_top = 63.0
+offset_right = 108.0
+offset_bottom = 203.0
+
 [connection signal="pressed" from="DiceContainer/DiceButton" to="." method="_on_dice_button_pressed"]
 [connection signal="toggled" from="BankResourceContainer/BankButton" to="." method="_on_bank_button_toggled"]
 [connection signal="toggled" from="PlayerResourcesContainer/HideButton" to="." method="_on_hide_button_toggled"]
 [connection signal="button_up" from="DrawCardButton" to="." method="_on_draw_card_button_button_up"]
+[connection signal="toggled" from="TradeContainer/TradeButton" to="TradeContainer" method="_on_trade_button_toggled"]
+[connection signal="button_up" from="TradeContainer/TradeWithPeopleButton" to="TradeContainer" method="_on_trade_with_people_button_button_up"]
+[connection signal="button_up" from="TradeContainer/TradeWithBankButton" to="TradeContainer" method="_on_trade_with_bank_button_button_up"]
+[connection signal="button_up" from="TradeContainer/Panel/ResetTradeButton" to="TradeContainer" method="_on_reset_trade_button_up"]
+[connection signal="button_up" from="TradeContainer/Panel/MakeOfferButton" to="TradeContainer" method="_on_make_offer_button_up"]
+[connection signal="button_up" from="TradeContainer/Panel/AddResouceContainer/AddWood" to="TradeContainer" method="_on_add_wood_button_up"]
+[connection signal="button_up" from="TradeContainer/Panel/AddResouceContainer/AddIron" to="TradeContainer" method="_on_add_iron_button_up"]
+[connection signal="button_up" from="TradeContainer/Panel/AddResouceContainer/AddOil" to="TradeContainer" method="_on_add_oil_button_up"]
+[connection signal="button_up" from="TradeContainer/Panel/AddResouceContainer/AddCoal" to="TradeContainer" method="_on_add_coal_button_up"]
+[connection signal="button_up" from="TradeContainer/Panel/AddResouceContainer/AddUran" to="TradeContainer" method="_on_add_uran_button_up"]
+[connection signal="button_up" from="TradeContainer/Panel/RemoveResouceContainer/RemoveWood" to="TradeContainer" method="_on_remove_wood_button_up"]
+[connection signal="button_up" from="TradeContainer/Panel/RemoveResouceContainer/RemoveIron" to="TradeContainer" method="_on_remove_iron_button_up"]
+[connection signal="button_up" from="TradeContainer/Panel/RemoveResouceContainer/RemoveOil" to="TradeContainer" method="_on_remove_oil_button_up"]
+[connection signal="button_up" from="TradeContainer/Panel/RemoveResouceContainer/RemoveCoal" to="TradeContainer" method="_on_remove_coal_button_up"]
+[connection signal="button_up" from="TradeContainer/Panel/RemoveResouceContainer/RemoveUran" to="TradeContainer" method="_on_remove_uran_button_up"]
