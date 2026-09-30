@@ -41,6 +41,7 @@ layout_mode = 2
 anchors_preset = 0
 offset_right = 544.0
 offset_bottom = 128.0
+mouse_filter = 1
 script = ExtResource("2_e6vo3")
 
 [node name="PlayersDisplaysContainer" type="HBoxContainer" parent="PlayersDisplays"]
@@ -289,6 +290,7 @@ text = "00"
 anchors_preset = 0
 offset_right = 24.0
 offset_bottom = 24.0
+mouse_filter = 1
 script = ExtResource("5_e1glk")
 
 [node name="CardDepositContainer" type="Area2D" parent="."]

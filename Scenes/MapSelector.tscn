@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://cwc4epdf5risy"]
 
-[ext_resource type="Script" uid="uid://dn520mhfae3o7" path="res://Scripts/map_selector.gd" id="1_r6qvo"]
+[ext_resource type="Script" uid="uid://dn520mhfae3o7" path="res://Scripts/Maps/map_selector.gd" id="1_r6qvo"]
 
 [sub_resource type="Theme" id="Theme_r6qvo"]
 

@@ -69,28 +69,33 @@ func show_build_confirmation_dialog(building_name_pl: String, building_type: Str
 	
 	for child in cost_container.get_children():
 		child.queue_free()
-		
-	var cost = game.game_inventory.COSTS.get(building_type, {})
-	for res in cost:
-		var amount = cost[res]
-		
-		var item_box = HBoxContainer.new()
-		item_box.add_theme_constant_override("separation", 4)
-		
-		var count_label = Label.new()
-		count_label.text = str(amount)
-		
-		var icon_rect = TextureRect.new()
-		icon_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		icon_rect.custom_minimum_size = Vector2(24, 24)
-		icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		icon_rect.texture = get_resource_texture(res)
-		
-		item_box.add_child(count_label)
-		item_box.add_child(icon_rect)
-		
-		cost_container.add_child(item_box)
-		
+	
+	if game.turn_manager.is_setup_phase:
+		var free_label = Label.new()
+		free_label.text = "Darmowe (Faza Wstępna)"
+		cost_container.add_child(free_label)
+	else:
+		var cost = game.game_inventory.COSTS.get(building_type, {})
+		for res in cost:
+			var amount = cost[res]
+			
+			var item_box = HBoxContainer.new()
+			item_box.add_theme_constant_override("separation", 4)
+			
+			var count_label = Label.new()
+			count_label.text = str(amount)
+			
+			var icon_rect = TextureRect.new()
+			icon_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			icon_rect.custom_minimum_size = Vector2(24, 24)
+			icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			icon_rect.texture = get_resource_texture(res)
+			
+			item_box.add_child(count_label)
+			item_box.add_child(icon_rect)
+			
+			cost_container.add_child(item_box)
+			
 	confirm_dialog.popup_centered()
 
 # Wysyłanie żądania do serwera po zatwierdzeniu
