@@ -32,6 +32,8 @@ var trade_uran_count = 0
 
 var trade_target = "people"
 
+var trade_balance_value = 0 # neet to be 0 to get fair bank trade
+
 #--------- Show/Hide Trade Container ---------#
 func _on_trade_button_toggled(toggled_on: bool) -> void:
 	var trade_container_tween = create_tween()
@@ -44,12 +46,14 @@ func _on_trade_button_toggled(toggled_on: bool) -> void:
 #--------- Change Trade Type ---------#
 func _on_trade_with_people_button_button_up() -> void:
 	trade_target = "people"
+	trade_balance_value = 0
 	trade_counts_reset()
 	trade_values_update()
 
 
 func _on_trade_with_bank_button_button_up() -> void:
 	trade_target = "bank"
+	trade_balance_value = 0
 	trade_counts_reset()
 	trade_values_update()
 	pass # Replace with function body.
@@ -127,6 +131,7 @@ func _on_add_wood_button_up() -> void:
 		var res_val = if_bank_has_resource("wood",trade_wood_count)
 		if res_val:
 			trade_wood_count += res_val
+			trade_balance_value += 1
 	else:
 		trade_wood_count +=1
 	update_trade_counts()
@@ -136,6 +141,7 @@ func _on_add_iron_button_up() -> void:
 		var res_val = if_bank_has_resource("iron",trade_iron_count)
 		if res_val:
 			trade_iron_count += res_val
+			trade_balance_value += 1
 	else:
 		trade_iron_count +=1
 	update_trade_counts()
@@ -145,6 +151,7 @@ func _on_add_oil_button_up() -> void:
 		var res_val = if_bank_has_resource("oil",trade_oil_count)
 		if res_val:
 			trade_oil_count += res_val
+			trade_balance_value += 1
 	else:
 		trade_oil_count +=1
 	update_trade_counts()
@@ -154,6 +161,7 @@ func _on_add_coal_button_up() -> void:
 		var res_val = if_bank_has_resource("coal",trade_iron_count)
 		if res_val:
 			trade_coal_count += res_val
+			trade_balance_value += 1
 	else:
 		trade_coal_count +=1
 	update_trade_counts()
@@ -163,6 +171,7 @@ func _on_add_uran_button_up() -> void:
 		var res_val = if_bank_has_resource("uran",trade_uran_count)
 		if res_val:
 			trade_uran_count += res_val
+			trade_balance_value += 1
 	else:
 		trade_uran_count +=1
 	update_trade_counts()
@@ -172,30 +181,35 @@ func _on_remove_wood_button_up() -> void:
 	var res_val = if_player_has_resource("wood",trade_wood_count)
 	if res_val:
 		trade_wood_count -= res_val
+		trade_balance_value -= 1
 	update_trade_counts()
 
 func _on_remove_iron_button_up() -> void:
 	var res_val = if_player_has_resource("iron",trade_iron_count)
 	if res_val:
 		trade_iron_count -= res_val
+		trade_balance_value -= 1
 	update_trade_counts()
 	
 func _on_remove_oil_button_up() -> void:
 	var res_val = if_player_has_resource("oil",trade_oil_count)
 	if res_val:
 		trade_oil_count -= res_val
+		trade_balance_value -= 1
 	update_trade_counts()
 	
 func _on_remove_coal_button_up() -> void:
 	var res_val = if_player_has_resource("coal",trade_coal_count)
 	if res_val:
 		trade_coal_count -= res_val
+		trade_balance_value -= 1
 	update_trade_counts()
 	
 func _on_remove_uran_button_up() -> void:
 	var res_val = if_player_has_resource("uran",trade_uran_count)
 	if res_val:
 		trade_uran_count -= res_val
+		trade_balance_value -= 1
 	update_trade_counts()
 	
 func if_player_has_resource(res,res_count):
@@ -229,11 +243,17 @@ func if_bank_has_resource(res,res_count):
 func _on_reset_trade_button_up() -> void:
 	trade_counts_reset()
 	trade_values_update()
+	trade_balance_value = 0
 
 func _on_make_offer_button_up() -> void:
 	if (trade_wood_count != 0 or trade_coal_count != 0 or trade_oil_count!= 0 or trade_coal_count != 0 or trade_uran_count != 0):
-		var trade_offer = prepare_offer()
-		trade_manager.create_trade_offer(multiplayer.get_unique_id(),trade_offer,trade_target)
+		if trade_target == "bank":
+			if trade_balance_value == 0:
+				var trade_offer = prepare_offer()
+				trade_manager.create_trade_offer(multiplayer.get_unique_id(),trade_offer,trade_target)
+		else:
+			var trade_offer = prepare_offer()
+			trade_manager.create_trade_offer(multiplayer.get_unique_id(),trade_offer,trade_target)
 
 func prepare_offer():
 	var trade_offer = {

@@ -12,7 +12,7 @@ var drag_offset = Vector2.ZERO
 # Prefab karty
 const card_scene = preload("res://Scenes/Prefabs/card.tscn")
 
-func _process(delta):
+func _process(_delta):
 	if dragging:
 		selected_card.global_position = get_global_mouse_position() + drag_offset
 		

@@ -30,41 +30,106 @@ func decline_offer_handler(trade_offer):
 	trade_offer.queue_free()
 	return
 
-func accept_offer_handler(trade_offer,offer_values,sender_id):
-	var player_resources = game_inventory.get_player_resources(multiplayer.get_unique_id())
-	if if_player_has_resources(offer_values,player_resources):
-		for res in offer_values:
-			if offer_values[res] > 0:
-				game_inventory.take_resource(multiplayer.get_unique_id(),res,offer_values[res])
-				game_inventory.give_resource(sender_id,res,offer_values[res])
-			elif offer_values[res] < 0:
-				game_inventory.take_resource(sender_id,res,abs(offer_values[res]))
-				game_inventory.give_resource(multiplayer.get_unique_id(),res,abs(offer_values[res]))
+func accept_offer_handler(_trade_offer, offer_values, sender_id):
+	var receiver_id = multiplayer.get_unique_id()
+
+	var sender_resources = game_inventory.get_player_resources(sender_id)
+	var receiver_resources = game_inventory.get_player_resources(receiver_id)
+
+	# Sprawdzenie czy nadawca nadal posiada to, co oferował
+	if not player_has_resources(offer_values, sender_resources):
+		print("Nadawca nie ma już wymaganych surowców.")
+		return
+
+	# Sprawdzenie czy osoba akceptująca ma to, co musi oddać
+	if not player_has_resources(invert_offer(offer_values), receiver_resources):
+		print("Nie masz wystarczających surowców do tej wymiany.")
+		return
+
+	# Wykonanie wymiany
+	for res in offer_values:
+		var amount = offer_values[res]
+
+		if amount > 0:
+			# Nadawca dostaje
+			game_inventory.give_resource(sender_id, res, amount)
+			game_inventory.take_resource(receiver_id, res, amount)
+
+		elif amount < 0:
+			var abs_amount = abs(amount)
+
+			# Nadawca oddaje
+			game_inventory.take_resource(sender_id, res, abs_amount)
+			game_inventory.give_resource(receiver_id, res, abs_amount)
+
 	game_inventory.update_inventory()
 	gui.update_gui()
-	rpc("remove_trade_offer", sender_id)		
-	return
 
-func if_player_has_resources(offer_values,player_resources):
-	for res in player_resources:
-		if player_resources[res] < offer_values[res]:
-			print("Graczowi brakuje ", res)
-			return false
+	rpc("remove_trade_offer", sender_id)
+	
+func invert_offer(offer_values: Dictionary) -> Dictionary:
+	var inverted_offer = {}
+
+	for res in offer_values:
+		inverted_offer[res] = -offer_values[res]
+
+	return inverted_offer
+
+func player_has_resources(offer_values: Dictionary, player_resources: Dictionary) -> bool:
+	for res in offer_values:
+		var amount = offer_values[res]
+
+		# Wartość ujemna = gracz oddaje surowiec
+		if amount < 0:
+			if player_resources.get(res, 0) < abs(amount):
+				print("Graczowi brakuje ", res, ": ", abs(amount))
+				return false
+
 	return true
 
-func trade_with_bank(sender_id,offer_values):
+func bank_has_resources(offer_values: Dictionary, bank_resources: Dictionary) -> bool:
+	for res in offer_values:
+		var amount = offer_values[res]
+
+		if amount > 0:
+			if bank_resources.get(res, 0) < amount:
+				print("Bankowi brakuje ", res, ": ", amount)
+				return false
+
+	return true
+
+func trade_with_bank(sender_id, offer_values):
 	var player_resources = game_inventory.get_player_resources(sender_id)
-	var inventory = game_inventory.get_inventory()
-	if if_player_has_resources(offer_values,0):
-		for res in offer_values:
-			if offer_values[res] > 0:
-				game_inventory.take_resource(0,res,offer_values[res])
-				game_inventory.give_resource(sender_id,res,offer_values[res])
-			elif offer_values[res] < 0:
-				game_inventory.take_resource(sender_id,res,abs(offer_values[res]))
-				game_inventory.give_resource(0,res,abs(offer_values[res]))
+	var bank_resources = game_inventory.get_player_resources(0)
+
+	# Sprawdzenie gracza
+	if not player_has_resources(offer_values, player_resources):
+		print("Gracz nie ma wystarczających surowców.")
+		return
+
+	# Sprawdzenie banku
+	if not bank_has_resources(offer_values, bank_resources):
+		print("Bank nie ma wystarczających surowców.")
+		return
+
+	# Wykonanie wymiany
+	for res in offer_values:
+		var amount = offer_values[res]
+
+		if amount > 0:
+			# Bank daje graczowi
+			game_inventory.take_resource(0, res, amount)
+			game_inventory.give_resource(sender_id, res, amount)
+
+		elif amount < 0:
+			var abs_amount = abs(amount)
+
+			# Gracz daje bankowi
+			game_inventory.take_resource(sender_id, res, abs_amount)
+			game_inventory.give_resource(0, res, abs_amount)
+
 	game_inventory.update_inventory()
-	gui.update_gui()	
+	gui.update_gui()
 
 @rpc("any_peer", "call_local")
 func remove_trade_offer(sender_id):
