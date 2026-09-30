@@ -14,9 +14,8 @@ func can_build_factory(row: int, column: int, requester_id: int) -> Dictionary:
 	if player_number == -1:
 		return {"can_build": false, "reason": "Nie znaleziono gracza w turn_order!"}
 		
-	# Weryfikacja tury po ID zamiast po indeksie
-	var current_turn_player_id = game.turn_manager.turn_order[game.turn_manager.current_turn_index]
-	if requester_id != current_turn_player_id:
+
+	if requester_id != game.turn_manager.current_player_id:
 		return {"can_build": false, "reason": "To nie tura tego gracza!"}
 
 	var point = game.get_map_point(row, column)
@@ -28,7 +27,11 @@ func can_build_factory(row: int, column: int, requester_id: int) -> Dictionary:
 
 	if point.upgraded_factory:
 		return {"can_build": false, "reason": "Fabryka jest już maksymalnie ulepszona!"}
-
+		
+	if game.turn_manager.is_setup_phase:
+		if game.turn_manager.setup_step == "road":
+			return {"can_build": false, "reason": "Rozstawianie: w tym momencie musisz postawić drogę!"}
+			
 	var building_type = ""
 	var building_name_pl = ""
 
@@ -54,6 +57,10 @@ func can_build_factory(row: int, column: int, requester_id: int) -> Dictionary:
 	}
 
 func can_build_road(road_name: String, requester_id: int) -> Dictionary:
+	if game.turn_manager.is_setup_phase:
+		if game.turn_manager.setup_step == "factory":
+			return {"can_build": false, "reason": "Faza rozstawiania: musisz postawić fabrykę!"}
+	
 	var player_number = get_player_number(requester_id)
 	if player_number == -1:
 		return {"can_build": false, "reason": "Nie znaleziono gracza w turn_order!"}
@@ -73,6 +80,10 @@ func can_build_road(road_name: String, requester_id: int) -> Dictionary:
 
 	if not game.game_inventory.can_afford(requester_id, "road"):
 		return {"can_build": false, "reason": "Nie masz wystarczającej ilości surowców na drogę!"}
+	
+	if game.turn_manager.is_setup_phase:
+		if game.turn_manager.setup_step != "road":
+			return {"can_build": false, "reason": "Rozstawianie: tym momencie musisz postawić fabrykę!"}
 
 	return {
 		"can_build": true,
@@ -98,11 +109,9 @@ func request_place_factory(row: int, column: int):
 	var requester_id = multiplayer.get_remote_sender_id()
 	if requester_id == 0: requester_id = multiplayer.get_unique_id()
 
-	# Weryfikacja tury po ID zamiast po indeksie
-	var current_turn_player_id = game.turn_manager.turn_order[game.turn_manager.current_turn_index]
-	if requester_id != current_turn_player_id:
-		print("To nie tura tego gracza!")
-		return
+	# Weryfikacja tury
+	if requester_id != game.turn_manager.current_player_id:
+			return {"can_build": false, "reason": "To nie tura tego gracza!"}
 
 	var check = can_build_factory(row, column, requester_id)
 	if not check.can_build:
@@ -119,8 +128,12 @@ func request_place_factory(row: int, column: int):
 
 	for res_type in cost:
 		game.game_inventory.take_resource(requester_id, res_type, cost[res_type])
-
+	#FAZA ROZSTAWIANIA
 	game.game_inventory.update_inventory()
+	if game.turn_manager.is_setup_phase:
+		# nadal mamy Setup Phase, ale etap to teraz budowanie drogi
+		game.turn_manager.sync_state.rpc(requester_id, true, "road")
+		print("Darmowa fabryka postawiona. Czas na darmową drogę!")
 
 @rpc("any_peer", "call_local", "reliable")
 func request_place_road(road_name: String):
@@ -129,11 +142,9 @@ func request_place_road(road_name: String):
 	var requester_id = multiplayer.get_remote_sender_id()
 	if requester_id == 0: requester_id = multiplayer.get_unique_id()
 
-	# Weryfikacja tury po ID zamiast po indeksie
-	var current_turn_player_id = game.turn_manager.turn_order[game.turn_manager.current_turn_index]
-	if requester_id != current_turn_player_id:
-		print("To nie tura tego gracza!")
-		return
+	# Weryfikacja tury
+	if requester_id != game.turn_manager.current_player_id:
+		return {"can_build": false, "reason": "To nie tura tego gracza!"}
 
 	var check = can_build_road(road_name, requester_id)
 	if not check.can_build:
@@ -147,3 +158,7 @@ func request_place_road(road_name: String):
 
 	game.game_inventory.update_inventory()
 	game.update_map_road.rpc(road_name, player_number)
+	
+	# Faza rozstawiania.
+	if game.turn_manager.is_setup_phase:
+		game.turn_manager.advance_setup_turn() # kolejna tura rozstawiania

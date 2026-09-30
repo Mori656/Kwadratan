@@ -31,7 +31,8 @@ func _ready():
 		turn_manager.sync_turn_order.rpc(CoopHandler.players_in_game.keys())
 		
 		turn_manager.current_turn_index = 0
-		turn_manager.update_turn.rpc(turn_manager.turn_order[turn_manager.current_turn_index])
+		turn_manager.sync_state.rpc(turn_manager.turn_order[turn_manager.current_turn_index], false, "")
+		turn_manager.start_setup_phase(CoopHandler.players_in_game.keys())
 
 func _process(_delta):
 	if Input.is_action_just_pressed("ui_cancel"):
@@ -74,7 +75,7 @@ func _on_point_clicked(_viewport, event, _shape_idx, point):
 		if not info.can_build:
 			print(info.reason)
 			return
-
+		
 		var action_data = {
 			"type": info.building_type,
 			"row": point.row,
