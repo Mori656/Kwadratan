@@ -7,9 +7,9 @@ extends Control
 
 @export_category("Props")
 
-func setup_value(p_name = "user", resources_count = 0, cards = 0, points = 0) -> void:
+func setup_value(p_name = "user", resources = 0, cards = 0, points = 0) -> void:
 	set_player_name(p_name)
-	set_resources_count(resources_count)
+	set_resources_count(resources)
 	set_cards_count(cards)
 	set_points(points)
 	pass

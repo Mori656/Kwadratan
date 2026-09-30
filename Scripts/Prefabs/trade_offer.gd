@@ -4,8 +4,8 @@ extends Node2D
 @onready var wanted_resources: HBoxContainer = $OfferBox/OfferBoxcontent/OfferInfo/WantedResources
 var sender_id = -1
 
-func set_trade(trade: Dictionary, sender_id:int = -1):
-	self.sender_id = sender_id
+func set_trade(trade: Dictionary, id:int = -1):
+	self.sender_id = id
 	# Czyścimy poprzednią ofertę
 	for child in offered_resources.get_children():
 		child.queue_free()
