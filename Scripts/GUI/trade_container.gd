@@ -251,10 +251,11 @@ func _on_make_offer_button_up() -> void:
 			if trade_balance_value == 0:
 				var trade_offer = prepare_offer()
 				trade_manager.create_trade_offer(multiplayer.get_unique_id(),trade_offer,trade_target)
+				_on_reset_trade_button_up()
 		else:
 			var trade_offer = prepare_offer()
 			trade_manager.create_trade_offer(multiplayer.get_unique_id(),trade_offer,trade_target)
-
+			_on_reset_trade_button_up()
 func prepare_offer():
 	var trade_offer = {
 		"wood":trade_wood_count,
